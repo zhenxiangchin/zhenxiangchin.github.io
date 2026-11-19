@@ -38,7 +38,6 @@ window.PORTFOLIO = {
             { type: 'video', wide: true, poster: 'tol-still-08',
               sources: [
                 { file: 'media/videos/a-thread-of-life.mp4', label: 'A Thread of Life · full film' },
-                { file: '../NEWEST%20A%20THREAD%20OF%20LIFE.mp4', label: 'A Thread of Life · full film' },
                 { file: 'media/videos/a-thread-of-life-reel.mp4', label: 'Stills reel (silent) · full film coming soon' },
                 { file: 'media/videos/a-thread-of-life-reel.webm', label: 'Stills reel (silent) · full film coming soon' }
               ] },

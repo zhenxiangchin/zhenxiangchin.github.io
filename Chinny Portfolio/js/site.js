@@ -26,7 +26,7 @@
     gate: true,     // the "click to continue" screen with the red ENTER button, shown once per visit (on since 17 Nov 2026)
     popups: false,  // old-PC pop-up windows advertising your first three works, once per visit (off since 19 Nov 2026)
     oldCursor: true,// the little pixel mouse arrow on the TV glass. false = the red dot
-    lofi: false,    // covers on the home page in low colour (made by MAKE-LOFI.bat). Off since 17 Nov 2026: it made the words in the artwork unreadable
+    lofi: false,    // covers on the home page in low colour. Off since 17 Nov 2026 (words in the artwork became unreadable); its pictures and MAKE-LOFI tool were removed 19 Nov 2026, so leave this off
     headline: false,// the big "I draw stuff" headline at the top (off since 17 Nov 2026)
     tv: true,       // animation works sit inside a retro TV in "All the stuffs"
     books: true,    // comics show as a turning 3D book in "All the stuffs"
