@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chinny Portfolio</title>
+<meta name="description" content="Chinny (Chin Zhen Xiang, 陈震翔): illustrator, animator and designer from Malaysia. One red thread runs through everything.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/revamp.css">
+</head>
+<body data-theme="light" class="skin-crt">
+
+<!-- Chinny's portfolio.
+     It reads the same artwork and words as the main site (../website/js/content.js),
+     plus the changes Chinny saved in edit mode (../website/js/edits.js),
+     so keep this folder next to the "website" folder. -->
+
+<div class="paper" aria-hidden="true"></div>
+<canvas class="ropes" id="ropes" aria-hidden="true"></canvas>
+<div class="cursor" id="cursor" aria-hidden="true"><i class="cursor-dot"></i></div>
+
+<!-- opening: a thread pulls the name across -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-inner">
+    <div class="intro-name"><span>C</span><span>H</span><span>I</span><span>N</span><span>N</span><span>Y</span></div>
+    <i class="intro-line"></i>
+    <p class="intro-sub">a portfolio, sewn together by hand</p>
+  </div>
+</div>
+
+<header class="nav" id="nav">
+  <a href="#top" class="brand">Chinny <span class="zh">陈震翔</span></a>
+  <nav class="nav-links">
+    <a href="#line">Work</a>
+    <a href="#film">Film</a>
+    <a href="#achievements">Awards</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-hi">Say hi</a>
+  </nav>
+</header>
+
+<main id="main">
+  <svg class="thread" id="thread" aria-hidden="true">
+    <path id="threadShadow" class="thread-shadow"/>
+    <path id="threadPath" class="thread-path"/>
+    <g id="needle" class="needle"><path d="M-30 0 L22 -1.6 Q30 0 22 1.6 Z"/><ellipse cx="-22" cy="0" rx="5" ry="1.4"/></g>
+  </svg>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top" data-theme="light">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <p class="eyebrow hero-eyebrow">Illustrator · Animator · Designer · Malaysia</p>
+        <h1 class="hero-title" id="heroTitle">I draw wobbly stuff.</h1>
+        <div class="hero-foot">
+          <p class="hero-lede">Hi, I'm <b>Chinny</b> (Chin Zhen Xiang), 21. I turn culture, food and feelings into pictures that wiggle. Currently extremely unemployed. Part-time Catan player.</p>
+          <a class="follow" href="#line" data-cursor="Go">Follow the thread <span>↓</span></a>
+        </div>
+      </div>
+      <!-- Chinny's animations, playing in a frame beside the headline -->
+      <figure class="hero-reel">
+        <div class="hero-screen" id="heroBg"><video muted playsinline preload="auto"></video><video muted playsinline preload="auto"></video></div>
+        <figcaption><button class="hero-now" id="heroNow" data-cursor="Open"></button></figcaption>
+      </figure>
+      <!-- more art: shove them with the mouse, click to open -->
+      <div class="hero-art" id="heroArt"></div>
+    </div>
+    <div class="puppet" id="puppet" data-cursor="Swing me"><i class="puppet-loop"></i><img src="../website/media/img/mascot-standee.webp" alt="Ah Kit, the main character of A Thread of Life, dangling from a red thread tied to his backpack" draggable="false"><span class="say" id="say"></span></div>
+  </section>
+
+  <div class="marquee" id="marquee" aria-hidden="true"><div class="marquee-track" id="marqueeTrack"></div></div>
+
+  <!-- ============ CLOTHESLINE ============ -->
+  <section class="line" id="line" data-theme="light">
+    <div class="line-stage" id="lineStage">
+      <div class="line-track" id="lineTrack">
+        <svg class="line-rope" id="lineRope" aria-hidden="true"><path id="lineRopePath"/><g id="lineNeedle" class="needle" style="opacity:0"><path d="M-30 0 L22 -1.6 Q30 0 22 1.6 Z"/><ellipse cx="-22" cy="0" rx="5" ry="1.4"/></g></svg>
+        <div class="line-head">
+          <span class="eyebrow">Chapter 01 · Selected work</span>
+          <h2 class="h2">Things I've done, <br>all connected to a thread.</h2>
+          <p class="muted">Keep scrolling and the line slides by. Grab a piece and give it a swing, or click it to look closer.</p>
+        </div>
+      </div>
+      <div class="line-progress" aria-hidden="true"><i id="lineBar"></i></div>
+    </div>
+  </section>
+
+  <!-- ============ FILM ============ -->
+  <section class="film" id="film" data-theme="dark">
+    <div class="wrap">
+      <span class="eyebrow">Chapter 02 · The big one</span>
+      <h2 class="film-title" id="filmTitle">A Thread of Life <span class="zh">爱情阿杂</span></h2>
+      <div class="film-player" id="filmPlayer">
+        <video id="filmVideo" playsinline preload="none" poster="../website/media/img/tol-still-08.webp"></video>
+        <button class="film-play" id="filmPlay" data-cursor="Play"><span class="film-play-ring"></span><b>Play the film</b><small>8 min 40 s · sound on</small></button>
+      </div>
+      <div class="film-info">
+        <dl class="facts">
+          <div><dt>Format</dt><dd>2D short film</dd></div>
+          <div><dt>Length</dt><dd>8m 40s</dd></div>
+          <div><dt>Year</dt><dd>2025</dd></div>
+          <div><dt>Made by</dt><dd>Story, art, animation: me</dd></div>
+        </dl>
+        <div>
+          <p class="film-text" id="filmText"></p>
+          <p class="film-quote">“It starts off spicy and sour, and eventually the sweetness appears.”</p>
+        </div>
+      </div>
+      <h3 class="h3">Six scenes, no spoilers</h3>
+      <div class="scenes" id="scenes"></div>
+      <button class="btn btn-light" data-open="thread" data-cursor="Open">Open the whole project →</button>
+    </div>
+  </section>
+
+  <!-- ============ EVERYTHING ============ -->
+  <section class="all" id="all" data-theme="light">
+    <div class="wrap">
+      <div class="all-head">
+        <div>
+          <span class="eyebrow">Chapter 03 · The archive</span>
+          <h2 class="h2" id="allTitle">Every single thing.</h2>
+        </div>
+        <div class="chips" id="chips" role="tablist" aria-label="Filter by category"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about" id="about" data-theme="light">
+    <div class="wrap about-grid">
+      <figure class="about-photo" id="aboutPhoto"><img id="aboutImg" src="../website/media/img/me-photo.webp" alt="Chinny crouching next to a deer"><figcaption id="aboutCap">The dude and a new friend</figcaption><i class="tape t1"></i><i class="tape t2"></i></figure>
+      <div>
+        <span class="eyebrow">Chapter 04 · The human</span>
+        <h2 class="h2">The human behind <br>the wiggles.</h2>
+        <p class="about-lede" id="aboutIntro"></p>
+        <blockquote class="about-quote" id="aboutQuote"></blockquote>
+        <div class="stats" id="stats">
+          <div><b data-count="26">0</b><span>projects and counting</span></div>
+          <div><b data-count="50">0</b><span>artists herded at the MIAVILLE bazaar</span></div>
+          <div><b data-count="30">0</b><span>days drawing and building in Osaka</span></div>
+          <div><b data-count="3">0</b><span>days to sell out all my merch</span></div>
+        </div>
+        <ul class="tools" id="tools"></ul>
+      </div>
+    </div>
+    <div class="wrap awards-wrap">
+      <h3 class="h3 big"><span id="awTitle">Things that happened</span></h3>
+      <ol class="awards" id="awards"></ol>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="contact" id="contact" data-theme="dark">
+    <div class="wrap">
+      <span class="eyebrow">Chapter 05 · The end of the thread</span>
+      <h2 class="contact-title">Come let's go <b>makan</b>!</h2>
+      <div class="contact-grid">
+        <div class="cord-zone" id="cordZone">
+          <div class="tassel away" id="tassel" data-cursor="Pull" role="button" tabindex="0" aria-label="Pull the needle to copy my email">
+            <svg viewBox="0 0 40 130" aria-hidden="true"><path class="ndl" d="M20 2 C23.5 2 24.5 5 24.5 9 L23 104 L20 128 L17 104 L15.5 9 C15.5 5 16.5 2 20 2 Z"/><ellipse class="ndl-eye" cx="20" cy="13" rx="1.7" ry="6"/><path class="ndl-shine" d="M18.2 24 L17.6 98"/></svg>
+          </div>
+          <svg class="heart" id="heart" aria-hidden="true" viewBox="-60 -70 120 150"><path id="heartPath"/></svg>
+          <p class="cord-hint" id="cordHint">pull the needle ↓<br><small>(it copies my email)</small></p>
+        </div>
+        <div class="makan-zone" id="makanZone">
+          <canvas aria-hidden="true"></canvas>
+          <span class="makan-rgb"><button class="gate-btn makan-btn" id="makanBtn" data-cursor="Copy" aria-label="Click me: copies my email"><span class="gate-cap">Click me</span></button></span>
+        </div>
+        <div class="contact-cards">
+          <p class="contact-lede">Freelance, full-time, collabs, or just to say hi. My eyes are glued to my notifications, so you'll hear back fast.</p>
+          <a class="contact-card" id="mailLink" href="#" data-cursor="Write"><small>email</small><b></b></a>
+          <a class="contact-card" id="igLink" href="#" target="_blank" rel="noopener" data-cursor="Visit"><small>instagram</small><b></b></a>
+        </div>
+      </div>
+      <footer class="footer">
+        <span>© 2025 Chinny (Chin Zhen Xiang). Every drawing here is Chinny's.</span>
+        <small>Typeface: Vercetti by Richard Mandona, published by Filippos Fragkogiannis</small>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ============ PROJECT PAGE ============ -->
+<section id="project" class="project hidden" role="dialog" aria-modal="true" aria-label="Project">
+  <div class="p-bar">
+    <button class="p-close" id="pClose" data-cursor="Close">← Back</button>
+    <span class="p-count" id="pCount"></span>
+    <div class="p-nav"><button id="pPrev" aria-label="Previous project">←</button><button id="pNext" aria-label="Next project">→</button></div>
+  </div>
+  <div class="p-scroll" id="pScroll"><div id="pBody"></div></div>
+</section>
+
+<!-- ============ LIGHTBOX ============ -->
+<section id="lightbox" class="hidden" role="dialog" aria-modal="true" aria-label="Artwork viewer">
+  <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+  <button class="lb-nav prev" id="lbPrev" aria-label="Previous">←</button>
+  <figure><div class="lb-stage" id="lbStage"></div><figcaption id="lbCap"></figcaption></figure>
+  <button class="lb-nav next" id="lbNext" aria-label="Next">→</button>
+</section>
+
+<script src="../website/js/content.js"></script>
+<script src="../website/js/edits.js"></script>
+<script src="js/my-edits.js"></script>
+<script src="js/site.js"></script>
+<script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js"}}</script>
+<script type="module" src="js/logo3d.js"></script>
+<script type="module" src="js/model3d.js"></script>
+<script src="js/edit.js"></script>
+</body>
+</html>

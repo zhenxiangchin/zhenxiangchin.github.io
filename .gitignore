@@ -1,0 +1,7 @@
+# Only the website goes online. Everything else in this folder stays private on this PC.
+/*
+!/.gitignore
+!/.nojekyll
+!/index.html
+!/website/
+!/Chinny Portfolio/

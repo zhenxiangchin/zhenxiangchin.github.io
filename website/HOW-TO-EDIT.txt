@@ -1,0 +1,84 @@
+CHIN ZHEN XIANG PORTFOLIO · how to use and edit your website
+=============================================================
+
+OPEN IT
+  Double-click index.html. It opens in your web browser. No installs needed.
+  (Fonts load from the internet, so it looks best when you're online.)
+
+EASIEST WAY TO CHANGE THINGS: EDIT MODE
+  1. Double-click EDIT-MY-SITE.html (use Chrome or Edge).
+  2. Click any words on the page and type. Click a picture (card pictures,
+     your About photo, the little guy) to replace it with a file from your computer.
+  3. Point at anything and a small black toolbar appears above it:
+       Bigger         pick the box around it (words -> card -> whole section)
+       Move           hold it and drag. On a work card it says "Drag to reorder":
+                      drop the card on another card to put it before/after it.
+       Up / Down      on a whole section: move the section up or down the page
+       Colour         change the colour of its words or its fill
+       Delete         hide it. In edit mode it stays faded so you can press
+                      "Bring back"; visitors don't see it at all.
+       Reset          put its colour and position back
+  4. Press "Save to my folder". The first time, it asks you to pick your
+     "website" folder and allow saving. Done. Refresh to check.
+  Your changes are stored in js/edits.js and new pictures go into media/uploads/.
+  To undo everything, delete everything in js/edits.js.
+  Things you drag with Move show on computer screens. Phones keep the tidy
+  stacked layout so nothing ends up off screen.
+  (The showreel list and the insides of project pages are still in js/content.js.)
+
+WHAT'S IN THIS FOLDER
+  index.html         the page itself
+  css/style.css      colours, sizes and animations
+  js/content.js      ALL your text and artwork lists  <- edit this one
+  js/main.js         the page behaviour (filters, project pages, cursor, showreel, the little guy)
+  js/editor.js       edit mode
+  js/edits.js        the changes you saved in edit mode
+  fonts/             the Vercetti typeface (keep its credit and licence files with it)
+  js/game.js         old game version, no longer used, safe to delete
+  media/img/         full-size artwork
+  media/thumb/       small previews of the same artwork
+  media/gifs/        GIFs
+  media/videos/      videos
+
+ADD YOUR FILMS
+  Put your film files in media/videos/ with exactly these names:
+    a-thread-of-life.mp4
+    alien-game.mp4
+  The site plays them automatically. Until then it plays the silent
+  "stills reels" I made from your animation stills.
+  Right now A Thread of Life plays straight from
+  "NEWEST A THREAD OF LIFE.mp4" in the folder above "website", so keep
+  that file where it is (or put a copy in media/videos/ as above).
+  (Remember: use a version of A Thread of Life without "Radio Ga Ga"
+  for the public site, since that song got the YouTube upload blocked.)
+
+ADD A NEW PICTURE OR GIF
+  1. Copy the file into media/img/ (or media/gifs/ for a GIF).
+  2. Open js/content.js in Notepad.
+  3. Find the section it belongs to and add a line like:
+       { src: 'media/img/my-new-piece.jpg', caption: 'My new piece · 2026' },
+     or for a GIF:
+       { type: 'gif', src: 'media/gifs/my-loop.gif', caption: 'Walk cycle' },
+  4. Save and refresh the browser.
+
+  Tip: each entry in a section's "projects" list shows up as one card
+  under "Selected work", and clicking it opens that project's page.
+
+CHANGE THE ORDER OR PICTURE OF THE "SELECTED WORK" CARDS
+  In js/content.js:
+  - Easiest: use Move in edit mode (see above). That order wins over workOrder.
+  - workOrder (near the bottom) lists the cards from top left onwards.
+    Move a name up or down the list to move its card.
+  - Add  cover: 'picture-name'  to a project to choose its card picture.
+  Pictures are never cropped; each card keeps the picture's real shape.
+
+THE SHOWREEL AT THE TOP
+  The list of clips and pictures is "showreel" in js/content.js.
+  Clips live in media/videos/ (reel-meowzilla.mp4, reel-watch.mp4 ...).
+  Add a line like
+    { title: 'My new thing', video: 'reel-my-clip', open: 'illustration-3' },
+  or for a picture
+    { title: 'My new thing', img: 'morning-market', open: 'illustration-3' },
+  Everything is shown whole, never zoomed or cropped, so pick wide
+  (landscape) pictures: tall ones leave big empty sides.
+  If a clip file is missing, its picture is shown instead.
