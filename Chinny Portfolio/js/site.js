@@ -65,7 +65,7 @@
     if (S.id === 'thread' || S.id === 'animation') {
       projects.push({ ...base, id: S.id, title: S.id === 'animation' ? 'Alien Game' : S.title, zh: S.zh, year: '2025', badge: 'Film', cover: S.cover, intro: S.intro, tag: S.tag, parts: S.projects });
     } else {
-      S.projects.forEach((P, i) => projects.push({ ...base, id: S.id + '-' + (i + 1), title: P.title, year: yearOf(P.meta), cover: P.cover || firstImage(P.media), intro: P.text || S.intro, tag: P.meta, parts: [{ ...P, title: '' }] }));
+      S.projects.forEach((P, i) => projects.push({ ...base, id: S.id + '-' + (i + 1), title: P.title, year: yearOf(P.meta), cover: P.cover || firstImage(P.media), intro: P.text || S.intro, tag: P.meta, parts: P.parts || [{ ...P, title: '' }] })); // parts: a work with several headed parts (Illuspeak)
     }
   });
   const SB = DATA.sketchbook;
@@ -89,7 +89,7 @@
     film.media = film.media.filter(m => m !== kit && m.src !== 'tol-poster');
     film.media.splice(1, 0, { type: 'video', poster: 'tol-casefilm', sources: [{ file: 'media/videos/tol-case-film.mp4', label: 'Case film' }] },
       { src: 'tol-poster-2026', caption: 'Poster', wide: true, left: true }, { src: 'tol-concept', caption: 'Concept board', wide: true });
-    if (merch) merch.media = [{ src: 'tol-merch-cut', caption: 'The merch line', bare: true }, ...(kit ? [{ ...kit, bare: true }] : [])];
+    if (merch && kit) merch.media.unshift({ ...kit, cutout: false, bare: true }); // the merch photos themselves are in content.js (19 Nov 2026)
   }
   // the arcade machine from the Interior Room, as an item of its own next to Soda Crackers (Chinny, 17 Nov 2026).
   // Its 3D model: media/3d/arcade-machine.glb, exported from MIA/SEM 5/3D Final Submission/...isometric room.blend (object "Sphere")
@@ -116,6 +116,24 @@
         media: [{ type: 'tiktok', id: '7639303220254264584', cover: 'drumothy-tt-1', caption: '592K views · May 2026' },
           { type: 'tiktok', id: '7696455930380176647', cover: 'drumothy-tt-2', caption: '249K views · Oct 2026' },
           { type: 'tiktok', id: '7657881695445683463', cover: 'drumothy-tt-3', caption: '121K views · Jul 2026' }] }
+    ] });
+  // Prudential Malaysia (19 Nov 2026): social content made at Naga DDB Tribal, second in the shop after Drumothy.
+  // The Instagram covers were saved from the posts on 19 Nov 2026 (media/img/pru-*.webp); Ep 1's is Chinny's own thumbnail.
+  const IG = id => 'https://www.instagram.com/' + id + '/';
+  projects.splice(1, 0, { id: 'prudential', cat: 'Design', color: '#ed1b2e', ink: '#ffffff', accent: '#ffd23f', title: 'Prudential Malaysia', sub: 'Social content · Naga DDB Tribal', year: '2026', cover: 'pru-flagship',
+    intro: 'Social content for Prudential Malaysia, made during my internship at Naga DDB Tribal: a flagship post on what breast cancer really costs, the Hidden Cost series on critical illness, and the key visuals for the Prudential Agency Awards 2025.',
+    tag: 'Social media · Prudential Malaysia · Naga DDB Tribal · 2026',
+    parts: [
+      { title: 'Flagship post', meta: 'Instagram · Jul 2026', text: 'Breast cancer affects many Malaysian women, and the bills keep coming long after treatment. A carousel on what it really costs.',
+        media: [{ type: 'tiktok', href: IG('p/DaT77xZCHK9'), badge: 'Instagram', r: .8, cover: 'pru-flagship', caption: 'Flagship post · Jul 2026' }] },
+      { title: 'Hidden Cost series', meta: 'Instagram · PRUMy Critical Care · May – Jun 2026', text: 'Three episodes on the costs of critical illness that come after the hospital: income, home care and the family who rely on you.',
+        media: [{ type: 'tiktok', href: IG('p/DYl997wDW_4'), badge: 'Instagram', cover: 'pru-ep1', caption: 'Ep 1 · May 2026' },
+          { type: 'tiktok', href: IG('reel/DZZFvCIj97S'), badge: 'Instagram', cover: 'pru-ep2', caption: 'Ep 2 · Reel · Jun 2026' },
+          { type: 'tiktok', href: IG('reel/DZMimPnzEpO'), badge: 'Instagram', cover: 'pru-ep3', caption: 'Ep 3 · Reel · Jun 2026' }] },
+      { title: 'Prudential Agency Awards 2025', meta: 'Key visuals · Photoshoot', text: 'Key visuals for the Million Dollar Agency and Master Wealth Planner winners, from group shots to solo portraits.',
+        media: [{ src: 'pru-mda', wide: true }, { src: 'pru-mda-2' }, { src: 'pru-mda-3' }, { src: 'pru-mda-4' },
+          { src: 'pru-mwp', wide: true }, { src: 'pru-mwp-2' }, { src: 'pru-mwp-3' }, { src: 'pru-mwp-4' }, { src: 'pru-mwp-5' },
+          { src: 'pru-shoot-1', caption: 'At the photoshoot' }, { src: 'pru-shoot-2', caption: 'At the photoshoot' }, { src: 'pru-shoot-3', caption: 'At the photoshoot' }] }
     ] });
   projects.forEach((p, i) => {
     p.index = i;
@@ -992,9 +1010,9 @@
      ========================================================= */
   let current = -1, lbList = [], lbIndex = 0;
   // width ÷ height of every picture in media/img, so galleries lay out before the pictures arrive
-  const RATIO = {"ag-1":2.263,"ag-10":1.732,"ag-11":1.775,"ag-12":1.802,"ag-13":1.778,"ag-2":2.721,"ag-3":1.787,"ag-4":1.782,"ag-5":1.779,"ag-6":1.797,"ag-7":1.773,"ag-8":1.833,"ag-9":1.817,"ag-board":1.733,"ag-chars-1":1.413,"ag-chars-2":1.413,"bazaar-1":1.603,"bazaar-2":2.36,"bazaar-3":2.023,"bazaar-4":0.75,"closeup-1":0.69,"closeup-2":2.028,"closeup-3":0.633,"cover":1.423,"fan-demonslayer":0.658,"fan-mori":1.0,"fight-fright":0.708,"fruity-buddies":0.864,"h2h-gold":1.41,"h2h-lion":0.523,"h2h-piece-1":1.416,"h2h-piece-2":0.681,"h2h-piece-3":0.637,"h2h-red":0.896,"h2h-spread-1":1.417,"h2h-spread-2":1.417,"hm-1":1.137,"hm-2":1.417,"hm-3":1.162,"hm-4":0.964,"hm-book":1.045,"hm-cover":0.708,"hm-front":0.705,"lion-dance":2.832,"honor-1":1.98,"honor-2":1.998,"honor-3":2.0,"honor-4":1.998,"hotel-1":1.824,"hotel-2":1.778,"hotel-3":0.937,"hotel-4":1.309,"hotel-5":1.235,"ideal-breakfast":1.435,"jp-1":1.5,"jp-2":1.5,"jp-3":1.5,"jp-30days":0.421,"jp-artbattle":1.499,"jp-group":1.49,"jp-manhole":0.654,"lion-banner-2":2.832,"lion-banner":2.832,"lookback":1.432,"mascot-2":0.517,"mascot-3":0.57,"mascot-standee":0.576,"mascot-wave":0.585,"me-photo":1.25,"monin-board":1.416,"monin-booth":1.414,"monin-chibi":0.927,"monin-girl":0.584,"monin-keychains":1.427,"monin-logo":0.998,"monin-page":1.413,"monin-photo":1.78,"monin-tees":1.508,"monin-tote-art":1.0,"morning-market":1.414,"nlp-1":0.711,"nlp-2":0.703,"nlp-3":0.716,"nlp-4":0.728,"nlp-5":0.692,"nlp-6":0.735,"nlp-7":0.705,"nlp-cover":0.705,"nlp3d-1":0.849,"nlp3d-2":1.778,"nlp3d-3":1.778,"nlp3d-4":1.778,"nlp3d-5":1.778,"pixel-snow":1.0,"pixel-vi":1.0,"popcorn-pack-2":1.787,"popcorn-pack":1.489,"popcorn-page":1.413,"posters-page":1.413,"prog-1":1.778,"prog-2":1.778,"prog-3":1.778,"prog-4":1.778,"prog-5":1.778,"redpacket-page":1.413,"reel-manga":1.778,"reel-meowzilla":1.778,"reel-spaceboyfriend":1.333,"reel-watch":1.778,"rhino-phone":0.554,"room-1":1.776,"room-2":1.776,"room-3":1.601,"samzilla-d1":0.943,"samzilla-d2":0.946,"samzilla-d3":0.943,"samzilla":1.432,"sang-kelembai":1.421,"self-expression":0.707,"shoyuemi":0.835,"sketch-1":0.703,"sketch-2":0.683,"sketch-3":0.718,"sketch-4":0.864,"sketch-5":0.583,"sketch-6":0.757,"sketch-7":0.651,"sketch-8":0.8,"sketch-9":0.8,"smile-cover":0.707,"smile-p1":0.707,"smile-p2":0.708,"smile-p3":0.707,"smile-p4":2.549,"soda-1":1.778,"soda-2":1.778,"texture-study":0.831,"tol-fyp-1":1.334,"tol-fyp-2":1.333,"tol-fyp-3":1.342,"tol-fyp-4":1.926,"tol-mascot":0.663,"tol-merch":1.413,"tol-miaville-1":1.302,"tol-miaville-2":1.5,"tol-miaville-3":1.333,"tol-miaville-4":0.871,"tol-miaville-poster":0.707,"tol-poster":0.708,"tol-shop":1.777,"tol-still-01":1.41,"tol-still-02":1.777,"tol-still-03":1.874,"tol-still-04":1.873,"tol-still-05":1.977,"tol-still-06":2.128,"tol-still-07":2.165,"tol-still-08":1.94,"tol-still-09":1.777,"tol-still-10":1.777,"tol-still-11":2.206,"turf-war":1.411,"vi-texture":0.909};
+  const RATIO = {"ag-1":2.263,"ag-10":1.732,"ag-11":1.775,"ag-12":1.802,"ag-13":1.778,"ag-2":2.721,"ag-3":1.787,"ag-4":1.782,"ag-5":1.779,"ag-6":1.797,"ag-7":1.773,"ag-8":1.833,"ag-9":1.817,"ag-board":1.733,"ag-chars-1":1.413,"ag-chars-2":1.413,"bazaar-1":1.603,"bazaar-2":2.36,"bazaar-3":2.023,"bazaar-4":0.75,"closeup-1":0.69,"closeup-2":2.028,"closeup-3":0.633,"cover":1.423,"fan-demonslayer":0.658,"fan-mori":1.0,"fight-fright":0.708,"fruity-buddies":0.864,"h2h-gold":1.41,"h2h-lion":0.523,"h2h-piece-1":1.416,"h2h-piece-2":0.681,"h2h-piece-3":0.637,"h2h-red":0.896,"h2h-spread-1":1.417,"h2h-spread-2":1.417,"hm-1":1.137,"hm-2":1.417,"hm-3":1.162,"hm-4":0.964,"hm-book":1.045,"hm-cover":0.708,"hm-front":0.705,"lion-dance":2.832,"honor-1":1.98,"honor-2":1.998,"honor-3":2.0,"honor-4":1.998,"hotel-1":1.824,"hotel-2":1.778,"hotel-3":0.937,"hotel-4":1.309,"hotel-5":1.235,"ideal-breakfast":1.435,"jp-1":1.5,"jp-2":1.5,"jp-3":1.5,"jp-30days":0.421,"jp-artbattle":1.499,"jp-group":1.49,"jp-manhole":0.654,"lion-banner-2":2.832,"lion-banner":2.832,"lookback":1.432,"mascot-2":0.517,"mascot-3":0.57,"mascot-standee":0.576,"mascot-wave":0.585,"me-photo":1.25,"monin-board":1.416,"monin-booth":1.414,"monin-chibi":0.927,"monin-girl":0.584,"monin-keychains":1.427,"monin-logo":0.998,"monin-page":1.413,"monin-photo":1.78,"monin-tees":1.508,"monin-tote-art":1.0,"morning-market":1.414,"nlp-1":0.711,"nlp-2":0.703,"nlp-3":0.716,"nlp-4":0.728,"nlp-5":0.692,"nlp-6":0.735,"nlp-7":0.705,"nlp-cover":0.705,"nlp3d-1":0.849,"nlp3d-2":1.778,"nlp3d-3":1.778,"nlp3d-4":1.778,"nlp3d-5":1.778,"pixel-snow":1.0,"pixel-vi":1.0,"popcorn-pack-2":1.787,"popcorn-pack":1.489,"popcorn-page":1.413,"posters-page":1.413,"prog-1":1.778,"prog-2":1.778,"prog-3":1.778,"prog-4":1.778,"prog-5":1.778,"redpacket-page":1.413,"reel-manga":1.778,"reel-meowzilla":1.778,"reel-spaceboyfriend":1.333,"reel-watch":1.778,"rhino-phone":0.554,"room-1":1.776,"room-2":1.776,"room-3":1.601,"samzilla-d1":0.943,"samzilla-d2":0.946,"samzilla-d3":0.943,"samzilla":1.432,"sang-kelembai":1.421,"self-expression":0.707,"shoyuemi":0.835,"sketch-1":0.703,"sketch-2":0.683,"sketch-3":0.718,"sketch-4":0.864,"sketch-5":0.583,"sketch-6":0.757,"sketch-7":0.651,"sketch-8":0.8,"sketch-9":0.8,"smile-cover":0.707,"smile-p1":0.707,"smile-p2":0.708,"smile-p3":0.707,"smile-p4":2.549,"soda-1":1.778,"soda-2":1.778,"texture-study":0.831,"tol-fyp-1":1.334,"tol-fyp-2":1.333,"tol-fyp-3":1.342,"tol-fyp-4":1.926,"tol-mascot":0.576,"tol-merch":1.413,"tol-miaville-1":1.302,"tol-miaville-2":1.5,"tol-miaville-3":1.333,"tol-miaville-4":0.871,"tol-miaville-poster":0.707,"tol-poster":0.708,"tol-shop":1.777,"tol-still-01":1.41,"tol-still-02":1.777,"tol-still-03":1.874,"tol-still-04":1.873,"tol-still-05":1.977,"tol-still-06":2.128,"tol-still-07":2.165,"tol-still-08":1.94,"tol-still-09":1.777,"tol-still-10":1.777,"tol-still-11":2.206,"turf-war":1.411,"vi-texture":0.909};
   function videoPlayer(m) {
-    const f = el('figure', 'g-item g-video');
+    const f = el('figure', 'g-item g-video' + (m.tall ? ' tall' : '')); // tall = a phone-shaped (portrait) video
     const v = el('video'); v.controls = true; v.playsInline = true; v.preload = 'metadata';
     if (m.poster) v.poster = imgSrc(m.poster);
     const cap = el('figcaption', '', '');
@@ -1012,10 +1030,12 @@
     const type = m.type || 'img';
     if (type === 'video') return videoPlayer(m);
     if (type === 'tiktok') { // a preview card (cover picture from TikTok, saved in media/img) that opens the video on TikTok.
+      // Also used for Instagram: href = the post, badge = its label, r = the cover's shape (default 9:16)
       // Not TikTok's player: it said "Player authentication failed" on Chinny's PC, and an iframe hides the pixel cursor.
-      const f = el('a', 'g-item g-tiktok'); f.href = `https://www.tiktok.com/@kfcmalaysia/video/${m.id}`; f.target = '_blank'; f.rel = 'noopener';
+      const f = el('a', 'g-item g-tiktok'); f.href = m.href || `https://www.tiktok.com/@kfcmalaysia/video/${m.id}`; f.target = '_blank'; f.rel = 'noopener';
+      if (m.r) f.style.setProperty('--r', m.r);
       f.dataset.cursor = 'Watch';
-      f.innerHTML = `<div class="g-pic"><img loading="lazy" src="${imgSrc(m.cover)}" alt="${esc(m.caption)}"><span class="tt-play" aria-hidden="true"></span><span class="tt-badge">TikTok ↗</span></div><figcaption>${esc(m.caption)}</figcaption>`;
+      f.innerHTML = `<div class="g-pic"><img loading="lazy" src="${imgSrc(m.cover)}" alt="${esc(m.caption)}"><span class="tt-play" aria-hidden="true"></span><span class="tt-badge">${esc(m.badge || 'TikTok')} ↗</span></div><figcaption>${esc(m.caption)}</figcaption>`;
       return f;
     }
     const full = type === 'gif' ? site(m.src) : imgSrc(m.src), shown = type === 'gif' || m.wide ? full : thumbSrc(m.src);
@@ -1053,7 +1073,7 @@
     const multi = p.parts.filter(pt => pt.title).length > 1;
     p.parts.forEach((part, k) => {
       const s = el('section', 'p-part wrap' + (multi ? ' multi' : ''));
-      if (multi) s.innerHTML = `<aside class="p-aside"><span class="p-num">${String(k + 1).padStart(2, '0')}</span><h2>${esc(part.title)}</h2>${part.meta ? `<p class="meta">${esc(part.meta)}</p>` : ''}${part.text ? `<p class="text">${esc(part.text)}</p>` : ''}</aside>`;
+      if (multi) s.innerHTML = `<aside class="p-aside"><span class="p-num">${String(k + 1).padStart(2, '0')}</span><h2>${esc(part.title)}</h2>${part.meta ? `<p class="meta">${esc(part.meta)}</p>` : ''}${part.text ? `<p class="text">${esc(part.text)}</p>` : ''}${part.link ? `<p class="text"><a class="p-link" href="${esc(part.link.href)}" target="_blank" rel="noopener">${esc(part.link.label)} ↗</a></p>` : ''}</aside>`;
       const g = s.appendChild(el('div', 'g-rows'));
       (part.media || []).forEach(m => g.appendChild(galleryItem(m, part.title || name, p)));
       g.appendChild(el('i', 'g-fill'));

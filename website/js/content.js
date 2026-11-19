@@ -56,21 +56,42 @@ window.PORTFOLIO = {
           ]
         },
         {
-          title: 'Merchandise', meta: 'Keychains · Film postcard · Badge · Stickers · Mini achar charm',
-          media: [ { src: 'tol-merch', wide: true, caption: 'The full merch line' } ]
+          title: 'Merchandise', meta: 'Keychains · Badges · Mini achar charm · T-shirt',
+          media: [
+            { src: 'tol-merch-key-2', caption: 'Ah Kit keychain', bare: true },
+            { src: 'tol-merch-key-4', caption: 'Bucket hat keychain', bare: true },
+            { src: 'tol-merch-key-3', caption: 'Achar keychain', bare: true },
+            { src: 'tol-merch-key-1', caption: '陳公館 signboard keychain', bare: true },
+            { src: 'tol-merch-badge-2', caption: 'Badge', bare: true },
+            { src: 'tol-merch-badge-1', caption: 'Badge', bare: true },
+            { src: 'tol-merch-charm', caption: 'Mini achar charm, glows in the dark', bare: true },
+            { src: 'tol-merch-tee', caption: 'T-shirt design', bare: true },
+            { type: 'video', tall: true, poster: 'tol-tee-printing', sources: [ { file: 'media/videos/tol-tee-printing.mp4', label: 'Printing the t-shirts' } ] }
+          ]
         },
         {
           title: 'MIAVILLE Art Bazaar', meta: 'The Linc KL · 28 – 30 Nov 2025',
           text: 'Collaborated with 50 artists to make this event happen. All merchandise sold out on the 3rd day.',
           media: [
+            { src: 'tol-miaville-4', wide: true, caption: 'My booth' },
             { src: 'tol-miaville-poster', caption: 'Booth poster' },
-            { src: 'tol-miaville-4' }, { src: 'tol-miaville-1' }, { src: 'tol-miaville-2' }, { src: 'tol-miaville-3' }
+            { src: 'tol-miaville-1' }, { src: 'tol-miaville-2' }, { src: 'tol-miaville-3' }
           ]
         },
         {
           title: 'Final Year Project Showcase', meta: 'Malaysian Institute of Arts · 12 Dec 2025',
           text: 'A thematic presentation showcasing and highlighting my animation project.',
           media: [ { src: 'tol-fyp-1' }, { src: 'tol-fyp-4' }, { src: 'tol-fyp-3' }, { src: 'tol-fyp-2' } ]
+        },
+        {
+          title: 'Illuspeak', meta: 'MIA Illustration Diploma Show 2026 · GMBB, Kuala Lumpur · 18 – 26 Jul 2026',
+          text: 'A Thread of Life got its own booth at the diploma show: Ah Kit on the wall, the film stills, the merch and my portfolio. I also curated the event website and made a digital stamp hunt minigame for visitors.',
+          link: { href: 'https://illuspeak.netlify.app/', label: 'illuspeak.netlify.app' },
+          media: [
+            { src: 'tol-illuspeak-1', wide: true, caption: 'My booth' }, { src: 'illuspeak-site', caption: 'The event website' },
+            { src: 'tol-illuspeak-2' }, { src: 'tol-illuspeak-3' }, { src: 'tol-illuspeak-4' },
+            { src: 'tol-illuspeak-5' }, { src: 'tol-illuspeak-6' }, { src: 'tol-illuspeak-7' }
+          ]
         }
       ]
     },
@@ -271,6 +292,23 @@ window.PORTFOLIO = {
           title: 'MIAVILLE Art Bazaar', meta: 'The Linc KL · 2025',
           text: 'Collaborated with 50 artists to make this event happen. A huge success, with all merchandise sold out on the 3rd day.',
           media: [ { src: 'bazaar-3', wide: true }, { src: 'bazaar-1' }, { src: 'bazaar-4' }, { src: 'bazaar-2' } ]
+        },
+        {
+          title: 'Illuspeak', meta: 'MIA Illustration Diploma Show 2026 · GMBB, Kuala Lumpur · 18 – 26 Jul 2026',
+          cover: 'illuspeak-group',
+          text: 'Illuspeak was the Malaysian Institute of Art Illustration Diploma Show 2026 at GMBB. I showed A Thread of Life in my own booth, curated the event website and made a digital stamp hunt minigame for visitors. I also took home the Master of Everything Award and a Special Mention Award.',
+          parts: [
+            { title: 'My booth', meta: 'A Thread of Life',
+              media: [ { src: 'tol-illuspeak-1', wide: true }, { src: 'tol-illuspeak-2' }, { src: 'tol-illuspeak-3' }, { src: 'tol-illuspeak-4' },
+                { src: 'tol-illuspeak-5' }, { src: 'tol-illuspeak-6' }, { src: 'tol-illuspeak-7' } ] },
+            { title: 'Digital stamp hunt', meta: 'Event website · Minigame',
+              text: 'I curated the event website and made a stamp hunt for it. Six hidden QR stamps, drawn by me, were placed around the show for visitors to find and scan.',
+              link: { href: 'https://illuspeak.netlify.app/', label: 'illuspeak.netlify.app' },
+              media: [ { src: 'illuspeak-site', caption: 'The event website' }, { src: 'illuspeak-stamp-1', bare: true }, { src: 'illuspeak-stamp-2', bare: true }, { src: 'illuspeak-stamp-3', bare: true },
+                { src: 'illuspeak-stamp-4', bare: true }, { src: 'illuspeak-stamp-5', bare: true }, { src: 'illuspeak-stamp-6', bare: true } ] },
+            { title: 'The show', meta: 'GMBB · Jul 2026',
+              media: [ { src: 'illuspeak-group', wide: true }, { src: 'illuspeak-poster', caption: 'Event poster' }, { src: 'illuspeak-group-2' } ] }
+          ]
         }
       ]
     },
@@ -331,7 +369,7 @@ window.PORTFOLIO = {
     'thread', 'illustration-1', 'animation', 'illustration-3', 'publications-2', 'identity-1',
     'illustration-2', 'illustration-6', 'identity-5', 'publications-1', 'illustration-8', 'threed-3',
     'illustration-7', 'identity-2', 'publications-3', 'illustration-4', 'identity-4', 'illustration-5',
-    'threed-1', 'identity-3', 'threed-4', 'threed-2', 'activities-2', 'activities-1', 'activities-3', 'sketchbook'
+    'threed-1', 'identity-3', 'threed-4', 'threed-2', 'activities-4', 'activities-2', 'activities-1', 'activities-3', 'sketchbook'
   ],
 
   /* Sketchbook: shown as its own project */

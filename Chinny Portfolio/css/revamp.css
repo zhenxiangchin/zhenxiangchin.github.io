@@ -608,3 +608,8 @@ html.editing .stk-deco{pointer-events:auto}
 @keyframes drum-flick{0%{opacity:0}20%{opacity:1}35%{opacity:.25}55%{opacity:1}}
 @keyframes drum-twinkle{0%,100%{opacity:0;transform:scale(0) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
 @media (prefers-reduced-motion:reduce){.drum-rays,.drum-spark,.drum-cone{animation:none!important}.g-drum:hover .drum-spark{opacity:.8;transform:none}}
+/* portrait (phone) videos keep their shape instead of a 16:9 box */
+.g-item.g-video.tall{background:none;text-align:center}
+.g-video.tall video{width:min(340px,100%);margin:0 auto}
+.g-video.tall video{aspect-ratio:9/16}
+.p-link{color:inherit;text-decoration:underline;text-underline-offset:3px}
