@@ -613,3 +613,45 @@ html.editing .stk-deco{pointer-events:auto}
 .g-video.tall video{width:min(340px,100%);margin:0 auto}
 .g-video.tall video{aspect-ratio:9/16}
 .p-link{color:inherit;text-decoration:underline;text-underline-offset:3px}
+
+/* 22 Nov 2026: pictures/clips that sit under a part's words on the left (media `aside: true`, e.g. the Thread of Life poster,
+   the t-shirt printing clip). That column isn't sticky then, so a tall picture is never cut off. `small: true` parts (Merchandise) get smaller pictures. */
+.p-aside:has(.g-item){position:static}
+.p-aside .g-item{display:block;width:100%;margin-top:22px;flex:none}
+.p-aside .g-item .g-pic img{width:100%;height:auto;max-height:none}
+.p-aside .g-video.tall video{width:100%}
+.p-part.small .g-rows{--row:120px}
+.p-part.small .g-item.bare{max-width:240px}
+/* the arcade machine's page: its 3D model up close (js/model3d.js viewer). Drag to turn, wheel to zoom. */
+.g-item.g-model{cursor:grab;background:radial-gradient(ellipse at 50% 45%,rgba(255,255,255,.08),transparent 70%)}
+.g-item.g-model.grabbing{cursor:grabbing}
+.g-model .g-pic{position:relative;height:min(78vh,760px)}
+.g-model .g-pic img{width:100%;height:100%;object-fit:contain;max-height:none}
+.g-model.has-model .g-pic img{visibility:hidden}
+.model3d-view{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}
+.g-model .g-model-hint{position:static;opacity:1;transform:none;background:none;text-align:center;color:var(--muted);padding:10px 0 0;font-size:13px}
+/* 23 Nov 2026: a small picture beside a work's title (HERO_ART in site.js: Hands to Heart's lion head) */
+.p-hero .wrap:has(> .p-hero-art){display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:clamp(20px,4vw,64px)}
+.p-hero .wrap:has(> .p-hero-art) > *{grid-column:1/-1}
+.p-hero .wrap:has(> .p-hero-art) > h1{grid-column:1;grid-row:2}
+.p-hero-art{grid-column:2!important;grid-row:2;align-self:center;justify-self:start;height:clamp(110px,17vw,250px);width:auto;margin-top:32px}
+/* 23 Nov 2026: pictures with a see-through background (media `cutout: true`) are shown truly see-through on project pages, no coloured box */
+.g-item.cut{background:none}
+.g-item.cut .g-pic img{width:100%;height:100%}
+/* 23 Nov 2026: "Click me" pops: a squash-and-spring bounce, and bubbles that float out and burst (makanButton in site.js) */
+.makan-btn.pop{animation:makan-pop .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes makan-pop{0%{scale:1}18%{scale:1.16 .82}42%{scale:.9 1.12}64%{scale:1.05 .96}82%{scale:.98 1.02}100%{scale:1}}
+.makan-bub{position:absolute;z-index:2;width:var(--s);height:var(--s);margin:calc(var(--s) / -2) 0 0 calc(var(--s) / -2);border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 32% 30%,#fff 0 18%,transparent 24%),radial-gradient(circle,transparent 52%,var(--c) 56% 64%,transparent 68%),color-mix(in srgb,var(--c) 22%,transparent);
+  animation:makan-bub var(--t) cubic-bezier(.15,.8,.3,1) forwards}
+@keyframes makan-bub{0%{transform:translate(0,0) scale(.2);opacity:1}70%{transform:translate(var(--dx),var(--dy)) scale(1);opacity:1}
+  85%{transform:translate(var(--dx),var(--dy)) scale(1.35);opacity:.8}100%{transform:translate(var(--dx),var(--dy)) scale(1.6);opacity:0}}
+/* 23 Nov 2026: phones — the film's play button and gold sticker shrink to fit the small player (the sticker's edit-mode size is for big screens only) */
+@media (max-width:700px){
+  .film-player .stk-gold{min-width:0;width:15%;top:-12px;right:-8px;zoom:1!important}
+  .film-play{gap:2px}
+  .film-play-ring{width:56px;height:56px;margin-bottom:6px}
+  .film-play-ring::after{left:22px;top:17px;border-left-width:17px;border-top-width:11px;border-bottom-width:11px}
+  .film-play b{font-size:16px}
+  body.skin-crt .film-play small,.film-play small{font-size:12px}
+}

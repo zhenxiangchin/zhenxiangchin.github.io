@@ -80,6 +80,15 @@
     osaka.parts.push({ ...battle.parts[0], title: plain('card:activities-2:title', battle.title) });
     projects = projects.filter(p => p !== battle);
   }
+  // Illustration Works (22 Nov 2026): Morning Market, Ideal Breakfast, Pixel Art & Self Expression and Characters & Fan Art
+  // are one work, each a part of its page. The ids stay as they were, so Chinny's edits still match.
+  const illo = ['illustration-3', 'illustration-4', 'illustration-5', 'illustration-6'].map(id => projects.find(p => p.id === id)).filter(Boolean);
+  if (illo.length > 1) {
+    illo[0].parts = illo.map(w => ({ ...w.parts[0], title: plain('card:' + w.id + ':title', w.title), meta: w.tag }));
+    Object.assign(illo[0], { title: 'Illustration Works', year: '2025', tag: 'Illustration · Pixel art · Fan art · 2022 – 2025',
+      intro: 'Personal illustrations from 2022 to 2025: a monster market, a breakfast, pixel art, a self portrait in colour, and characters I love.' });
+    projects = projects.filter(p => !illo.slice(1).includes(p));
+  }
   // A Thread of Life (17 Nov 2026): the case film, the newer poster shown big and the concept board go with the film;
   // Ah Kit (made for the merch) joins a smaller, cut-out merch picture
   const tol = projects.find(p => p.id === 'thread');
@@ -88,7 +97,7 @@
     const film = tol.parts[0], merch = tol.parts.find(pt => /merch/i.test(pt.title)), kit = film.media.find(m => m.src === 'tol-mascot');
     film.media = film.media.filter(m => m !== kit && m.src !== 'tol-poster');
     film.media.splice(1, 0, { type: 'video', poster: 'tol-casefilm', sources: [{ file: 'media/videos/tol-case-film.mp4', label: 'Case film' }] },
-      { src: 'tol-poster-2026', caption: 'Poster', wide: true, left: true }, { src: 'tol-concept', caption: 'Concept board', wide: true });
+      { src: 'tol-poster-2026', caption: 'Poster', aside: true }, { src: 'tol-concept', caption: 'Concept board', wide: true });
     if (merch && kit) merch.media.unshift({ ...kit, cutout: false, bare: true }); // the merch photos themselves are in content.js (19 Nov 2026)
   }
   // the arcade machine from the Interior Room, as an item of its own next to Soda Crackers (Chinny, 17 Nov 2026).
@@ -96,7 +105,7 @@
   const soda = projects.find(p => p.id === 'threed-1');
   if (soda) projects.splice(projects.indexOf(soda) + 1, 0, { ...soda, id: 'arcade', title: 'Arcade Machine', year: '2025', cover: 'arcade-machine',
     intro: 'The arcade machine from my Interior Room, on its own: Soda Crackers on top, Meowzilla on the screen.', tag: '3D model · 2025',
-    parts: [{ title: '', media: [{ src: 'arcade-machine', cutout: true, bare: true }] }] });
+    parts: [{ title: '', media: [{ type: 'model', model: 'media/3d/arcade-machine.glb', src: 'arcade-machine' }] }] }); // the real 3D model, up close (js/model3d.js)
   // New Life Project (18 Nov 2026): the 3D environments are part of the comic's world, so they go into the comic's page
   // as a second part, and the separate 3D card goes
   const nlp = projects.find(p => p.id === 'publications-3'), nlp3d = projects.find(p => p.id === 'threed-4');
@@ -112,7 +121,7 @@
     tag: 'Character design · KFC Malaysia · Naga DDB Tribal · 2026 · 1M+ views · 110K+ likes',
     parts: [
       { title: 'Meet Drumothy', meta: 'Mascot · 2026', media: [{ type: 'gif', src: DRUM, cutout: true, bare: true, drum: true }] },
-      { title: 'He blew up', meta: '1M+ views · 110K+ likes on TikTok', text: 'A few of my favourite KFC Malaysia TikToks starring Drumothy. There are lots more on the account.',
+      { title: 'Find him on TikTok', meta: '1M+ views · 110K+ likes on TikTok', text: 'A few of my favourite KFC Malaysia TikToks starring Drumothy. There are lots more on the account.',
         media: [{ type: 'tiktok', id: '7639303220254264584', cover: 'drumothy-tt-1', caption: '592K views · May 2026' },
           { type: 'tiktok', id: '7696455930380176647', cover: 'drumothy-tt-2', caption: '249K views · Oct 2026' },
           { type: 'tiktok', id: '7657881695445683463', cover: 'drumothy-tt-3', caption: '121K views · Jul 2026' }] }
@@ -470,8 +479,19 @@
     const loop = t => { draw(t); raf = on && !reduced ? requestAnimationFrame(loop) : 0; };
     new IntersectionObserver(es => { on = es[es.length - 1].isIntersecting; if (on && !raf && !reduced) raf = requestAnimationFrame(loop); }).observe(zone);
     new ResizeObserver(fit).observe(zone); fit();
+    // the poppy click (23 Nov 2026): the button squashes and springs back, and bubbles float out and pop (css "makan-bub")
+    const bubbles = () => {
+      if (reduced) return;
+      btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
+      for (let i = 0; i < 18; i++) {
+        const a = i / 18 * Math.PI * 2 + Math.random() * .4, d = 130 + Math.random() * 150, b = el('i', 'makan-bub');
+        b.style.cssText = `left:${cx}px;top:${cy}px;--dx:${(Math.cos(a) * d).toFixed(0)}px;--dy:${(Math.sin(a) * d * .8 - 30).toFixed(0)}px;--s:${(18 + Math.random() * 34).toFixed(0)}px;--t:${(.55 + Math.random() * .35).toFixed(2)}s;--c:${['#ff3040', '#ffffff', '#ffd23f'][i % 3]}`;
+        zone.appendChild(b); setTimeout(() => b.remove(), 1000);
+      }
+    };
     btn.onclick = async () => {
       burst = performance.now(); if (reduced || !on) draw(burst);
+      bubbles();
       const ok = await copyMail();
       // steel, except for a moment after copying: it says "Copied" and glows red, then goes back to steel after 1.4 s
       cap.textContent = ok ? 'Copied ♥' : 'Click me'; btn.parentElement.classList.toggle('lit', ok);
@@ -633,7 +653,7 @@
   const HEIGHTS = [38, 44, 36, 34, 42, 37, 35];
   // [project, picture, extras]: video = a clip that plays in the frame, book = a 3D book (front/back/spine pictures), h = height in vh
   const LINE_PICKS = [['thread', 'tol-still-08', { video: ['reel-tol-1', 'reel-tol-2', 'reel-tol-3', 'reel-tol-4', 'reel-tol-5', 'reel-tol-6'], r: 1280 / 588 }], ['illustration-1', 'lion-dance', { h: 34 }], ['illustration-3', 'morning-market'],
-    ['publications-2', 'hm-front', { book: ['hm-front', 'hm-back', 'hm-spine'], h: 42 }], ['illustration-8', 'samzilla'], ['illustration-6', 'lookback']];
+    ['publications-2', 'hm-front', { book: ['hm-front', 'hm-back', 'hm-spine'], h: 42 }], ['illustration-8', 'samzilla'], ['illustration-3', 'lookback']];
   function hang(f, onClick) {
     const g = { n: f, a: 0, av: 0, held: false, cx: 0, w: 0, top: 0, h: 0 };
     LINE.pegs.push(g);
@@ -864,6 +884,8 @@
   // works shown as a real 3D model in the item shop (the file is made in Blender and exported as .glb). To add one: 'Name of the work': 'media/3d/file.glb'
   const MODELS = { 'Soda Crackers': 'media/3d/soda-crackers.glb', 'Arcade Machine': 'media/3d/arcade-machine.glb' };
   // works shown whole, as a banner across a full row of the item shop: 'Name of the work': 'picture' (in the main site's media/thumb)
+  // a small picture beside a work's title on its page: 'id': 'picture' (Hands to Heart's full lion head, 23 Nov 2026)
+  const HERO_ART = { 'illustration-1': 'h2h-lion-full' };
   const BANNERS = { 'Hands to Heart: The Dance of the Lion': 'lion-dance' };
   /* ---------- Achievements: the list, biggest first. kind: 'trophy' (an award) or 'frame' (an exhibition). ---------- */
   const ACHIEVEMENTS = [
@@ -1010,10 +1032,11 @@
      ========================================================= */
   let current = -1, lbList = [], lbIndex = 0;
   // width ÷ height of every picture in media/img, so galleries lay out before the pictures arrive
-  const RATIO = {"ag-1":2.263,"ag-10":1.732,"ag-11":1.775,"ag-12":1.802,"ag-13":1.778,"ag-2":2.721,"ag-3":1.787,"ag-4":1.782,"ag-5":1.779,"ag-6":1.797,"ag-7":1.773,"ag-8":1.833,"ag-9":1.817,"ag-board":1.733,"ag-chars-1":1.413,"ag-chars-2":1.413,"bazaar-1":1.603,"bazaar-2":2.36,"bazaar-3":2.023,"bazaar-4":0.75,"closeup-1":0.69,"closeup-2":2.028,"closeup-3":0.633,"cover":1.423,"fan-demonslayer":0.658,"fan-mori":1.0,"fight-fright":0.708,"fruity-buddies":0.864,"h2h-gold":1.41,"h2h-lion":0.523,"h2h-piece-1":1.416,"h2h-piece-2":0.681,"h2h-piece-3":0.637,"h2h-red":0.896,"h2h-spread-1":1.417,"h2h-spread-2":1.417,"hm-1":1.137,"hm-2":1.417,"hm-3":1.162,"hm-4":0.964,"hm-book":1.045,"hm-cover":0.708,"hm-front":0.705,"lion-dance":2.832,"honor-1":1.98,"honor-2":1.998,"honor-3":2.0,"honor-4":1.998,"hotel-1":1.824,"hotel-2":1.778,"hotel-3":0.937,"hotel-4":1.309,"hotel-5":1.235,"ideal-breakfast":1.435,"jp-1":1.5,"jp-2":1.5,"jp-3":1.5,"jp-30days":0.421,"jp-artbattle":1.499,"jp-group":1.49,"jp-manhole":0.654,"lion-banner-2":2.832,"lion-banner":2.832,"lookback":1.432,"mascot-2":0.517,"mascot-3":0.57,"mascot-standee":0.576,"mascot-wave":0.585,"me-photo":1.25,"monin-board":1.416,"monin-booth":1.414,"monin-chibi":0.927,"monin-girl":0.584,"monin-keychains":1.427,"monin-logo":0.998,"monin-page":1.413,"monin-photo":1.78,"monin-tees":1.508,"monin-tote-art":1.0,"morning-market":1.414,"nlp-1":0.711,"nlp-2":0.703,"nlp-3":0.716,"nlp-4":0.728,"nlp-5":0.692,"nlp-6":0.735,"nlp-7":0.705,"nlp-cover":0.705,"nlp3d-1":0.849,"nlp3d-2":1.778,"nlp3d-3":1.778,"nlp3d-4":1.778,"nlp3d-5":1.778,"pixel-snow":1.0,"pixel-vi":1.0,"popcorn-pack-2":1.787,"popcorn-pack":1.489,"popcorn-page":1.413,"posters-page":1.413,"prog-1":1.778,"prog-2":1.778,"prog-3":1.778,"prog-4":1.778,"prog-5":1.778,"redpacket-page":1.413,"reel-manga":1.778,"reel-meowzilla":1.778,"reel-spaceboyfriend":1.333,"reel-watch":1.778,"rhino-phone":0.554,"room-1":1.776,"room-2":1.776,"room-3":1.601,"samzilla-d1":0.943,"samzilla-d2":0.946,"samzilla-d3":0.943,"samzilla":1.432,"sang-kelembai":1.421,"self-expression":0.707,"shoyuemi":0.835,"sketch-1":0.703,"sketch-2":0.683,"sketch-3":0.718,"sketch-4":0.864,"sketch-5":0.583,"sketch-6":0.757,"sketch-7":0.651,"sketch-8":0.8,"sketch-9":0.8,"smile-cover":0.707,"smile-p1":0.707,"smile-p2":0.708,"smile-p3":0.707,"smile-p4":2.549,"soda-1":1.778,"soda-2":1.778,"texture-study":0.831,"tol-fyp-1":1.334,"tol-fyp-2":1.333,"tol-fyp-3":1.342,"tol-fyp-4":1.926,"tol-mascot":0.576,"tol-merch":1.413,"tol-miaville-1":1.302,"tol-miaville-2":1.5,"tol-miaville-3":1.333,"tol-miaville-4":0.871,"tol-miaville-poster":0.707,"tol-poster":0.708,"tol-shop":1.777,"tol-still-01":1.41,"tol-still-02":1.777,"tol-still-03":1.874,"tol-still-04":1.873,"tol-still-05":1.977,"tol-still-06":2.128,"tol-still-07":2.165,"tol-still-08":1.94,"tol-still-09":1.777,"tol-still-10":1.777,"tol-still-11":2.206,"turf-war":1.411,"vi-texture":0.909};
+  const RATIO = {"ag-1":2.263,"ag-10":1.732,"ag-11":1.775,"ag-12":1.802,"ag-13":1.778,"ag-2":2.721,"ag-3":1.787,"ag-4":1.782,"ag-5":1.779,"ag-6":1.797,"ag-7":1.773,"ag-8":1.833,"ag-9":1.817,"ag-board":1.733,"ag-chars-1":1.413,"ag-chars-2":1.413,"bazaar-1":1.603,"bazaar-2":2.36,"bazaar-3":2.023,"bazaar-4":0.75,"closeup-1":0.69,"closeup-2":2.028,"closeup-3":0.633,"cover":1.423,"fan-demonslayer":0.658,"fan-mori":1.0,"fight-fright":0.708,"fruity-buddies":0.864,"h2h-gold":1.41,"h2h-lion":0.523,"h2h-lion-full":0.645,"h2h-honorpad":2.0,"h2h-piece-1":1.416,"h2h-piece-2":0.681,"h2h-piece-3":0.637,"h2h-red":0.896,"h2h-spread-1":1.417,"h2h-spread-2":1.417,"hm-1":1.137,"hm-2":1.417,"hm-3":1.162,"hm-4":0.964,"hm-book":1.045,"hm-cover":0.708,"hm-front":0.705,"lion-dance":2.832,"honor-1":1.98,"honor-2":1.998,"honor-3":2.0,"honor-4":1.998,"hotel-1":1.824,"hotel-2":1.778,"hotel-3":0.937,"hotel-4":1.309,"hotel-5":1.235,"ideal-breakfast":1.435,"jp-1":1.5,"jp-2":1.5,"jp-3":1.5,"jp-30days":0.421,"jp-artbattle":1.499,"jp-group":1.49,"jp-manhole":0.654,"lion-banner-2":2.832,"lion-banner":2.832,"lookback":1.432,"mascot-2":0.517,"mascot-3":0.57,"mascot-standee":0.576,"mascot-wave":0.585,"me-photo":1.25,"monin-board":1.416,"monin-booth":1.414,"monin-chibi":0.927,"monin-girl":0.584,"monin-keychains":1.427,"monin-logo":0.998,"monin-page":1.413,"monin-photo":1.78,"monin-tees":1.508,"monin-tote-art":1.0,"morning-market":1.414,"nlp-1":0.711,"nlp-2":0.703,"nlp-3":0.716,"nlp-4":0.728,"nlp-5":0.692,"nlp-6":0.735,"nlp-7":0.705,"nlp-cover":0.705,"nlp3d-1":0.849,"nlp3d-2":1.778,"nlp3d-3":1.778,"nlp3d-4":1.778,"nlp3d-5":1.778,"pixel-snow":1.0,"pixel-vi":1.0,"popcorn-pack-2":1.787,"popcorn-pack":1.489,"popcorn-page":1.413,"posters-page":1.413,"prog-1":1.778,"prog-2":1.778,"prog-3":1.778,"prog-4":1.778,"prog-5":1.778,"redpacket-page":1.413,"reel-manga":1.778,"reel-meowzilla":1.778,"reel-spaceboyfriend":1.333,"reel-watch":1.778,"rhino-phone":0.554,"room-1":1.776,"room-2":1.776,"room-3":1.601,"samzilla-d1":0.943,"samzilla-d2":0.946,"samzilla-d3":0.943,"samzilla":1.432,"sang-kelembai":1.421,"self-expression":0.707,"shoyuemi":0.835,"sketch-1":0.703,"sketch-2":0.683,"sketch-3":0.718,"sketch-4":0.864,"sketch-5":0.583,"sketch-6":0.757,"sketch-7":0.651,"sketch-8":0.8,"sketch-9":0.8,"smile-cover":0.707,"smile-p1":0.707,"smile-p2":0.708,"smile-p3":0.707,"smile-p4":2.549,"soda-1":1.778,"soda-2":1.778,"texture-study":0.831,"tol-fyp-1":1.334,"tol-fyp-2":1.333,"tol-fyp-3":1.342,"tol-fyp-4":1.926,"tol-mascot":0.576,"tol-merch":1.413,"tol-miaville-1":1.302,"tol-miaville-2":1.5,"tol-miaville-3":1.333,"tol-miaville-4":0.871,"tol-miaville-poster":0.707,"tol-poster":0.708,"tol-shop":2.123,"tol-still-01":2.162,"tol-still-02":1.777,"tol-still-03":1.874,"tol-still-04":1.873,"tol-still-05":1.977,"tol-still-06":2.128,"tol-still-07":2.165,"tol-still-08":1.94,"tol-still-09":1.777,"tol-still-10":1.777,"tol-still-11":2.206,"turf-war":1.411,"vi-texture":0.909};
   function videoPlayer(m) {
     const f = el('figure', 'g-item g-video' + (m.tall ? ' tall' : '')); // tall = a phone-shaped (portrait) video
-    const v = el('video'); v.controls = true; v.playsInline = true; v.preload = 'metadata';
+    const v = el('video'); v.controls = !m.muted; v.playsInline = true; v.preload = 'metadata';
+    if (m.muted) { v.muted = v.defaultMuted = v.autoplay = v.loop = true; } // a silent loop, like a moving picture
     if (m.poster) v.poster = imgSrc(m.poster);
     const cap = el('figcaption', '', '');
     f.append(v, cap);
@@ -1029,6 +1052,11 @@
   function galleryItem(m, title, p) {
     const type = m.type || 'img';
     if (type === 'video') return videoPlayer(m);
+    if (type === 'model') { // js/model3d.js puts the 3D model in here to turn round and zoom; the picture shows until it loads (or if 3D can't run)
+      const f = el('figure', 'g-item full g-model', `<div class="g-pic"><img src="${imgSrc(m.src)}" alt="${esc(title)}"></div><figcaption class="g-model-hint">Drag to turn it · scroll to zoom</figcaption>`);
+      f.dataset.viewer = m.model; f.dataset.cursor = 'Drag';
+      return f;
+    }
     if (type === 'tiktok') { // a preview card (cover picture from TikTok, saved in media/img) that opens the video on TikTok.
       // Also used for Instagram: href = the post, badge = its label, r = the cover's shape (default 9:16)
       // Not TikTok's player: it said "Player authentication failed" on Chinny's PC, and an iframe hides the pixel cursor.
@@ -1067,15 +1095,15 @@
     const hero = el('header', 'p-hero');
     hero.innerHTML = `<div class="wrap">
       <div class="p-hero-top"><span>${esc(p.cat)}${p.year ? ' · ' + esc(p.year) : ''}</span><span>${String(p.index + 1).padStart(2, '0')}</span></div>
-      <h1>${p.id === 'thread' ? TOL_LOGO : esc(name) + (p.zh ? `<span class="zh">${esc(p.zh)}</span>` : '')}</h1>${p.sub ? `<p class="p-sub">${esc(p.sub)}</p>` : ''}
+      <h1>${p.id === 'thread' ? TOL_LOGO : esc(name) + (p.zh ? `<span class="zh">${esc(p.zh)}</span>` : '')}</h1>${HERO_ART[p.id] ? `<img class="p-hero-art" src="${imgSrc(HERO_ART[p.id])}" alt="">` : ''}${p.sub ? `<p class="p-sub">${esc(p.sub)}</p>` : ''}
       <div class="p-hero-grid"><p class="p-intro">${esc(p.intro || '')}</p>${tags.length ? `<ul class="p-tags">${tags.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}</div></div>`;
     body.appendChild(hero);
     const multi = p.parts.filter(pt => pt.title).length > 1;
     p.parts.forEach((part, k) => {
-      const s = el('section', 'p-part wrap' + (multi ? ' multi' : ''));
+      const s = el('section', 'p-part wrap' + (multi ? ' multi' : '') + (part.small ? ' small' : ''));
       if (multi) s.innerHTML = `<aside class="p-aside"><span class="p-num">${String(k + 1).padStart(2, '0')}</span><h2>${esc(part.title)}</h2>${part.meta ? `<p class="meta">${esc(part.meta)}</p>` : ''}${part.text ? `<p class="text">${esc(part.text)}</p>` : ''}${part.link ? `<p class="text"><a class="p-link" href="${esc(part.link.href)}" target="_blank" rel="noopener">${esc(part.link.label)} ↗</a></p>` : ''}</aside>`;
-      const g = s.appendChild(el('div', 'g-rows'));
-      (part.media || []).forEach(m => g.appendChild(galleryItem(m, part.title || name, p)));
+      const g = s.appendChild(el('div', 'g-rows')), side = $('.p-aside', s);
+      (part.media || []).forEach(m => (m.aside && side ? side : g).appendChild(galleryItem(m, part.title || name, p))); // aside: under the words on the left
       g.appendChild(el('i', 'g-fill'));
       body.appendChild(s);
     });
@@ -1084,8 +1112,8 @@
     nb.style.setProperty('--nc', nx.color);
     nb.onclick = () => openProject(nx.id); nb.dataset.cursor = 'Next';
     body.appendChild(nb);
-    $('#pScroll').scrollTop = 0;
     P.classList.remove('hidden', 'closing'); document.body.classList.add('locked');
+    $('#pScroll').scrollTop = 0; // after showing it: while hidden the browser ignores this and keeps the last place
     if (!fromHash) history.replaceState(null, '', '#p/' + p.id);
   }
   function closeProject() {

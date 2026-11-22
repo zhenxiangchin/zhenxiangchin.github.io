@@ -23,35 +23,41 @@ function studio() {
   return t;
 }
 
+// renderer, studio lights and the model centred in a turning group. Shared by the shop cards and the project-page viewer.
+function stage(gltf) {
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); } catch (e) { return null; } // no 3D: the picture stays
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+  const cv = renderer.domElement;
+  cv.className = 'model3d'; cv.setAttribute('aria-hidden', 'true');
+
+  // lighting like a small product shoot: a studio for the shiny bits to reflect, a strong key light from the top left,
+  // a pink rim light behind and a cool fill from the right, so it has a bright side and a shadow side
+  const scene = new THREE.Scene(), pm = new THREE.PMREMGenerator(renderer), env = studio();
+  scene.environment = pm.fromEquirectangular(env).texture; scene.environmentIntensity = .9; env.dispose(); pm.dispose();
+  scene.add(new THREE.HemisphereLight(0xf4f0ff, 0x1c1826, .55));
+  const key = new THREE.DirectionalLight(0xfff4e8, 3.4); key.position.set(-3, 4, 4); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xff5a86, 2.2); rim.position.set(3, 2, -4); scene.add(rim);
+  const fill = new THREE.DirectionalLight(0x8fb6ff, .8); fill.position.set(4, -1, 2); scene.add(fill);
+
+  // the model, centred. Export it from Blender standing as in Blender's front view (its front facing the camera).
+  const model = gltf.scene;
+  model.traverse(n => { if (n.isMesh && n.material.transparent) { n.material.depthWrite = false; n.renderOrder = 2; } }); // the clear wrapper
+  const fit = new THREE.Group(); fit.add(model);
+  const bb = new THREE.Box3().setFromObject(fit), c = bb.getCenter(new THREE.Vector3()), size = bb.getSize(new THREE.Vector3());
+  model.position.sub(c);
+  const spin = new THREE.Group(); spin.add(fit); scene.add(spin);
+  const cam = new THREE.PerspectiveCamera(30, 4 / 3, .1, 100);
+  return { renderer, cv, scene, spin, cam, r: size.length() / 2 };
+}
+
 function mount(card) {
   const box = card.querySelector('.gcard-media');
   if (!box) return;
   loader.loadAsync(card.dataset.model).then(gltf => {
-    let renderer;
-    try { renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); } catch (e) { return; } // no 3D: the picture stays
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
-    const cv = renderer.domElement;
-    cv.className = 'model3d'; cv.setAttribute('aria-hidden', 'true');
-
-    // lighting like a small product shoot: a studio for the shiny bits to reflect, a strong key light from the top left,
-    // a pink rim light behind and a cool fill from the right, so it has a bright side and a shadow side
-    const scene = new THREE.Scene(), pm = new THREE.PMREMGenerator(renderer), env = studio();
-    scene.environment = pm.fromEquirectangular(env).texture; scene.environmentIntensity = .9; env.dispose(); pm.dispose();
-    scene.add(new THREE.HemisphereLight(0xf4f0ff, 0x1c1826, .55));
-    const key = new THREE.DirectionalLight(0xfff4e8, 3.4); key.position.set(-3, 4, 4); scene.add(key);
-    const rim = new THREE.DirectionalLight(0xff5a86, 2.2); rim.position.set(3, 2, -4); scene.add(rim);
-    const fill = new THREE.DirectionalLight(0x8fb6ff, .8); fill.position.set(4, -1, 2); scene.add(fill);
-
-    // the model, centred. Export it from Blender standing as in Blender's front view (its front facing the camera).
-    const model = gltf.scene;
-    model.traverse(n => { if (n.isMesh && n.material.transparent) { n.material.depthWrite = false; n.renderOrder = 2; } }); // the clear wrapper
-    const fit = new THREE.Group(); fit.add(model);
-    const bb = new THREE.Box3().setFromObject(fit), c = bb.getCenter(new THREE.Vector3()), size = bb.getSize(new THREE.Vector3());
-    model.position.sub(c);
-    const spin = new THREE.Group(); spin.add(fit); scene.add(spin);
-    const cam = new THREE.PerspectiveCamera(30, 4 / 3, .1, 100);
-    const r = size.length() / 2;
+    const S = stage(gltf); if (!S) return;
+    const { renderer, cv, scene, spin, cam, r } = S;
     cam.position.set(0, 0, r / Math.sin(THREE.MathUtils.degToRad(15)) * 1.45); // the canvas is 1.6 x the slot (see revamp.css), so this leaves room round it
 
     box.append(cv); box.classList.add('has-model');
@@ -89,6 +95,41 @@ function mount(card) {
     });
   }).catch(() => {}); // the picture stays
 }
+
+// the project page's viewer (a figure with data-viewer, made by site.js): the model up close, drag to turn it any way,
+// mouse wheel to zoom in and out. It turns slowly on its own until you touch it. Freed again when the page closes.
+function viewer(fig) {
+  const box = fig.querySelector('.g-pic');
+  loader.loadAsync(fig.dataset.viewer).then(gltf => {
+    if (!fig.isConnected) return;
+    const S = stage(gltf); if (!S) return;
+    const { renderer, cv, scene, spin, cam, r } = S;
+    const near = r / Math.sin(THREE.MathUtils.degToRad(15)); // the whole model just fits the height
+    const s = { a: 0, x: .12, z: 1, zoom: 1, drag: null, touched: false };
+    cv.className = 'model3d-view'; box.append(cv); fig.classList.add('has-model');
+    const fitCanvas = () => { const w = box.clientWidth, h = box.clientHeight; if (w && h) { renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); } };
+    new ResizeObserver(fitCanvas).observe(box); fitCanvas();
+    cv.addEventListener('pointerdown', e => { s.drag = { x: e.clientX, y: e.clientY, a: s.a, b: s.x }; s.touched = true; cv.setPointerCapture(e.pointerId); fig.classList.add('grabbing'); });
+    cv.addEventListener('pointermove', e => { const d = s.drag; if (!d) return; s.a = d.a + (e.clientX - d.x) * .01; s.x = clamp(d.b + (e.clientY - d.y) * .008, -1.2, 1.2); });
+    const up = () => { s.drag = null; fig.classList.remove('grabbing'); };
+    cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+    cv.addEventListener('wheel', e => { e.preventDefault(); s.touched = true; s.zoom = clamp(s.zoom * Math.exp(e.deltaY * .0012), .4, 1.5); }, { passive: false });
+    let last = 0;
+    renderer.setAnimationLoop(t => {
+      if (!cv.isConnected) { renderer.setAnimationLoop(null); renderer.dispose(); renderer.forceContextLoss(); return; } // the page closed
+      const f = last ? Math.min(50, t - last) / 16.7 : 1; last = t;
+      if (!s.touched && !still) s.a += .004 * f;
+      s.z += (s.zoom - s.z) * (1 - Math.pow(.85, f)); // eased zoom
+      cam.position.set(0, 0, near * .82 * s.z);
+      spin.rotation.set(s.x, s.a - .42, 0);
+      renderer.render(scene, cam);
+    });
+  }).catch(() => {}); // the picture stays
+}
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const viewers = () => document.querySelectorAll('.g-model[data-viewer]:not([data-viewer-on])').forEach(f => { f.dataset.viewerOn = '1'; viewer(f); });
+viewers();
+new MutationObserver(viewers).observe(document.body, { childList: true, subtree: true });
 
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !/edit/i.test(location.hash)) {
   const all = () => document.querySelectorAll('.gcard[data-model]:not([data-model-on])').forEach(c => { c.dataset.modelOn = '1'; mount(c); });

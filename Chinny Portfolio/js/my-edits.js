@@ -91,9 +91,7 @@ window.CHINNY_EDITS = {
       "html": "Merchandise"
     }
   },
-  "img": {
-    "all:img:22": "uploads/all-img-22-mwnfp7rp.webp"
-  },
+  "img": {},
   "style": {
     "top:box-hero-reel:1": {
       "size": 1.21

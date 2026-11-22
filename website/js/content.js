@@ -42,8 +42,7 @@ window.PORTFOLIO = {
                 { file: 'media/videos/a-thread-of-life-reel.webm', label: 'Stills reel (silent) · full film coming soon' }
               ] },
             { src: 'tol-poster', caption: 'Key art' },
-            { src: 'tol-mascot', caption: 'Ah Kit, character design', cutout: true },
-            { src: 'tol-shop', caption: 'The chicken rice shop' }
+            { src: 'tol-mascot', caption: 'Ah Kit, character design', cutout: true }
           ]
         },
         {
@@ -52,11 +51,11 @@ window.PORTFOLIO = {
             { src: 'tol-still-01', caption: 'Mixed rice', wide: true },
             { src: 'tol-still-02' }, { src: 'tol-still-03' }, { src: 'tol-still-05' },
             { src: 'tol-still-06' }, { src: 'tol-still-07' }, { src: 'tol-still-08' },
-            { src: 'tol-still-09' }, { src: 'tol-still-10' }, { src: 'tol-still-11' }, { src: 'tol-still-04' }
+            { src: 'tol-still-09' }, { src: 'tol-still-10' }, { src: 'tol-still-11' }, { src: 'tol-still-04' }, { src: 'tol-shop', caption: 'The chicken rice shop' }
           ]
         },
         {
-          title: 'Merchandise', meta: 'Keychains · Badges · Mini achar charm · T-shirt',
+          title: 'Merchandise', small: true, meta: 'Keychains · Badges · Mini achar charm · T-shirt',
           media: [
             { src: 'tol-merch-key-2', caption: 'Ah Kit keychain', bare: true },
             { src: 'tol-merch-key-4', caption: 'Bucket hat keychain', bare: true },
@@ -66,7 +65,7 @@ window.PORTFOLIO = {
             { src: 'tol-merch-badge-1', caption: 'Badge', bare: true },
             { src: 'tol-merch-charm', caption: 'Mini achar charm, glows in the dark', bare: true },
             { src: 'tol-merch-tee', caption: 'T-shirt design', bare: true },
-            { type: 'video', tall: true, poster: 'tol-tee-printing', sources: [ { file: 'media/videos/tol-tee-printing.mp4', label: 'Printing the t-shirts' } ] }
+            { type: 'video', tall: true, muted: true, aside: true, poster: 'tol-tee-printing', sources: [ { file: 'media/videos/tol-tee-printing.mp4', label: 'Printing the t-shirts' } ] }
           ]
         },
         {
@@ -107,16 +106,16 @@ window.PORTFOLIO = {
           title: 'Hands to Heart: The Dance of the Lion', cover: 'h2h-red', meta: 'Thematic · Cultural heritage · 2025',
           text: 'This series captures the spirit of lion dance: the rhythm, energy and craftsmanship that keep tradition alive. Inspired by my Perak roots, “霹霸” represents strength and pride. The first piece takes a maximalist approach with the drummer, cymbals, masked Buddha and flags, plus my own club “霸王”. The second captures the tension of pole jumping during Chinese New Year. The third honours masters Siow Ho Phiew and Lim Meng Kok, whose artistry shaped generations of lion dancers.',
           media: [
-            { src: 'h2h-spread-1', wide: true }, { src: 'h2h-spread-2', wide: true },
+            { src: 'lion-dance', wide: true },
             { src: 'h2h-piece-1', caption: 'Piece 1 · 霸王' }, { src: 'h2h-piece-2', caption: 'Piece 2 · Pole jumping' },
-            { src: 'h2h-piece-3', caption: 'Piece 3 · The masters' }, { src: 'h2h-lion', caption: 'Lion head', cutout: true },
+            { src: 'h2h-piece-3', caption: 'Piece 3 · The masters' }, { src: 'h2h-lion-full', caption: 'Lion head', cutout: true },
             { src: 'h2h-red' }, { src: 'h2h-gold' }
           ]
         },
         {
           title: 'HONOR Talents Global Design', meta: '2025',
           text: 'I adapted the lion dance artwork across watch faces and accessories, focusing on layout, colour, balance and keeping the visual identity of the series.',
-          media: [ { src: 'honor-1', wide: true }, { src: 'honor-2' }, { src: 'honor-3' }, { src: 'honor-4', wide: true } ]
+          media: [ { src: 'h2h-honorpad', wide: true }, { src: 'honor-1', wide: true }, { src: 'honor-2' }, { src: 'honor-3' }, { src: 'honor-4', wide: true } ]
         },
         {
           title: 'Morning Market', meta: '2024',
@@ -144,13 +143,13 @@ window.PORTFOLIO = {
           media: [ { src: 'sang-kelembai', wide: true } ]
         },
         {
-          title: 'Hand-drawn Works', meta: 'Traditional media · 2023 – 2024',
+          title: 'Hand-drawn Works', cover: 'texture-study', meta: 'Traditional media · 2023 – 2024',
           media: [
             { src: 'samzilla', caption: 'Samzilla · A2 watercolour, acrylic, colour pencil · Why is she breaking everything…', wide: true },
             { src: 'samzilla-d1' }, { src: 'samzilla-d2' }, { src: 'samzilla-d3' },
             { src: 'turf-war', caption: 'Turf War · A2 acrylic', wide: true },
             { src: 'closeup-1', caption: 'Close Up · A4 acrylic + colour pencil' }, { src: 'closeup-2' }, { src: 'closeup-3' },
-            { src: 'texture-study', caption: 'Texture Study · mixed media A2 · 2023' }
+            { src: 'texture-study', caption: 'Texture Study · mixed media A2 · 2023', wide: true, left: true }
           ]
         }
       ]
@@ -180,7 +179,7 @@ window.PORTFOLIO = {
         {
           title: 'Poster Design', cover: 'fight-fright', meta: '2024',
           text: 'Fight or Fright: a concept poster for a monster wrestling TV show set in the year 4024. If you see this, meowzilla said meow :3. Plus a newsprint poster on illustrator and animator Yoneyama Mai.',
-          media: [ { src: 'posters-page', wide: true }, { src: 'fight-fright', caption: 'Fight or Fright' } ]
+          media: [ { src: 'poster-fight-fright', caption: 'Fight or Fright' }, { src: 'poster-yoneyama', caption: 'Yoneyama Mai' } ]
         },
         {
           title: 'MIA × MONIN', cover: 'monin-tote-art', meta: 'Promotional marketing & product design · 2024',
@@ -230,12 +229,7 @@ window.PORTFOLIO = {
           title: 'Alien Game', meta: '2D animation · Sci-fi & action · 2m12s · 2025',
           text: 'People born in Naville City have a mark on their face. Despised and outcast, the Navillians were wiped out in a war waged by the Valheire Empire. Two children survived: one mysteriously rose to become Queen of Valheire, the other lived under its control. Years later, aliens invade and stage a grand tournament where humans compete for a mysterious prize, broadcast as a TV show for the aliens\' entertainment.',
           media: [
-            { type: 'video', wide: true, poster: 'ag-13',
-              sources: [
-                { file: 'media/videos/alien-game.mp4', label: 'Alien Game · full film' },
-                { file: 'media/videos/alien-game-reel.mp4', label: 'Stills reel (silent) · full film coming soon' },
-                { file: 'media/videos/alien-game-reel.webm', label: 'Stills reel (silent) · full film coming soon' }
-              ] }
+            { src: 'ag-13', wide: true, caption: 'Key art' }
           ]
         },
         {
@@ -249,7 +243,6 @@ window.PORTFOLIO = {
           title: 'Animation Progress', meta: 'Sketch → inking → colouring → background → shadow + lighting',
           media: [
             { type: 'gif', src: 'media/gifs/alien-game-progress.gif', caption: 'From sketch to final frame' },
-            { src: 'ag-13', caption: 'Key art' },
             { src: 'ag-chars-1', caption: 'Character design' }, { src: 'ag-chars-2', caption: 'Character design' },
             { src: 'ag-board', caption: 'Storyboard', wide: true }
           ]
@@ -347,7 +340,7 @@ window.PORTFOLIO = {
   showreel: [
     { title: 'A Thread of Life', video: 'reel-tol-1', img: 'tol-still-01', open: 'thread' },
     { title: 'Meowzilla · poster animation', video: 'reel-meowzilla', open: 'identity-4' },
-    { title: 'Hands to Heart: The Dance of the Lion', img: 'h2h-spread-1', open: 'illustration-1' },
+    { title: 'Hands to Heart: The Dance of the Lion', img: 'lion-dance', open: 'illustration-1' },
     { title: 'A Thread of Life', video: 'reel-tol-2', img: 'tol-still-02', open: 'thread' },
     { title: 'HONOR Talents · watch face', video: 'reel-watch', open: 'illustration-2' },
     { title: 'Morning Market', img: 'morning-market', open: 'illustration-3' },
@@ -356,7 +349,7 @@ window.PORTFOLIO = {
     { title: 'Alien Game', img: 'ag-13', open: 'animation' },
     { title: 'A Thread of Life', video: 'reel-tol-4', img: 'tol-still-05', open: 'thread' },
     { title: 'SpaceBoyFriend2005 · brand animation', video: 'reel-spaceboyfriend' },
-    { title: 'Ideal Breakfast', img: 'ideal-breakfast', open: 'illustration-4' },
+    { title: 'Ideal Breakfast', img: 'ideal-breakfast', open: 'illustration-3' },
     { title: 'A Thread of Life', video: 'reel-tol-5', img: 'tol-still-10', open: 'thread' },
     { title: 'Sang Kelembai', img: 'sang-kelembai', open: 'illustration-7' },
     { title: 'A Thread of Life', video: 'reel-tol-6', img: 'tol-still-11', open: 'thread' }
