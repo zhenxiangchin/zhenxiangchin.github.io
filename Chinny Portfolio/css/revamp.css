@@ -649,3 +649,5 @@ html.editing .stk-deco{pointer-events:auto}
   html{overscroll-behavior-y:none}
   .tube{bottom:auto;height:100vh;height:100lvh}
 }
+
+.chrome-hero{cursor:pointer}

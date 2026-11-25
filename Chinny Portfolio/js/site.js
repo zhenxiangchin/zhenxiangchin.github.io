@@ -1450,6 +1450,14 @@
     setInterval(() => { const s = (Date.now() - t0) / 1000 | 0; $('#osdTime').textContent = `SP ${s / 3600 | 0}:${two(s / 60 % 60 | 0)}:${two(s % 60)}`; }, 1000);
   }
   if (FX.chromeName) $('.hero-eyebrow').insertAdjacentHTML('afterend', chrome('chrome-hero'));
+
+  // a click on the logo plays its animation again (Chinny, 26 Nov 2026)
+  const logo = $('.chrome-hero');
+  if (logo) {
+    logo.setAttribute('role', 'button'); logo.tabIndex = 0; logo.setAttribute('aria-label', 'Chinny: play the logo animation again');
+    logo.onclick = replayLogo;
+    logo.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); replayLogo(); } };
+  }
   if (FX.tvRoom) $('#filmPlayer').insertAdjacentHTML('beforeend', GOLD); // in edit mode too, so its size can be changed
   buildTV();
   splitTitle(); heroArt(); heroReel(); if (FX.marquee) buildMarquee(); if (FX.line) buildLine(); buildFilm(); buildGrid(); buildAchievements(); buildAbout(); makanButton();
