@@ -88,7 +88,7 @@ window.PORTFOLIO_EDITS = {
     },
     "card:identity-2:title": {
       "from": "100 PLUS PRO: Go Beyond 100",
-      "html": "ShoYueMi Valentine Day"
+      "html": "Visual Identity | Promotional Design"
     },
     "card:threed-2:title": {
       "from": "Interior Room",

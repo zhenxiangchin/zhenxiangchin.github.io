@@ -108,14 +108,15 @@ window.PORTFOLIO = {
           media: [
             { src: 'lion-dance', wide: true },
             { src: 'h2h-piece-1', caption: 'Piece 1 · 霸王' }, { src: 'h2h-piece-2', caption: 'Piece 2 · Pole jumping' },
-            { src: 'h2h-piece-3', caption: 'Piece 3 · The masters' }, { src: 'h2h-lion-full', caption: 'Lion head', cutout: true },
+            { src: 'h2h-piece-3', caption: 'Piece 3 · The masters' },
             { src: 'h2h-red' }, { src: 'h2h-gold' }
           ]
         },
         {
           title: 'HONOR Talents Global Design', meta: '2025',
           text: 'I adapted the lion dance artwork across watch faces and accessories, focusing on layout, colour, balance and keeping the visual identity of the series.',
-          media: [ { src: 'h2h-honorpad', wide: true }, { src: 'honor-1', wide: true }, { src: 'honor-2' }, { src: 'honor-3' }, { src: 'honor-4', wide: true } ]
+          media: [ { type: 'video', poster: 'honor-watchface', muted: true, sources: [{ file: 'media/videos/honor-watchface.mp4', label: 'Watch face animation' }] },
+            { src: 'h2h-honorpad', wide: true }, { src: 'honor-1', wide: true }, { src: 'honor-2' }, { src: 'honor-3' }, { src: 'honor-4', wide: true } ]
         },
         {
           title: 'Morning Market', meta: '2024',
@@ -133,7 +134,7 @@ window.PORTFOLIO = {
           media: [
             { src: 'fruity-buddies', caption: 'Fruity Buddies! · 2025 · an OC who loves fruit, plus her little buddies :D' },
             { src: 'lookback', caption: 'Lookback fan art · 2025' },
-            { src: 'jp-30days', caption: '30 Days in JP · 2025 · mascots from my month in Osaka', cutout: true },
+            { src: 'jp-osaka', caption: '30 Days in JP · 2025 · mascots from my month in Osaka' },
             { src: 'fan-mori', caption: 'Mori Calliope · 2022' }, { src: 'fan-demonslayer', caption: 'Demon Slayer · 2022' }
           ]
         },
@@ -164,7 +165,7 @@ window.PORTFOLIO = {
       projects: [
         {
           title: 'Popcorn Durian', cover: 'popcorn-pack', meta: 'Branding design · 2024 · 榴莲味啤啤果',
-          media: [ { src: 'popcorn-page', wide: true }, { src: 'popcorn-pack', cutout: true, caption: 'Packaging' }, { src: 'popcorn-pack-2', cutout: true, caption: 'Packaging, back' } ]
+          media: [ { src: 'popcorn-poster', wide: true, caption: 'Poster' }, { src: 'popcorn-pack', cutout: true, caption: 'Packaging' }, { src: 'popcorn-pack-2', cutout: true, caption: 'Packaging, back' } ]
         },
         {
           title: 'ShoYueMi Valentine Day', cover: 'shoyuemi', meta: 'Snek Ku · Valentine\'s Day poster · 2024',

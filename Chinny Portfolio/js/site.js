@@ -89,6 +89,15 @@
       intro: 'Personal illustrations from 2022 to 2025: a monster market, a breakfast, pixel art, a self portrait in colour, and characters I love.' });
     projects = projects.filter(p => !illo.slice(1).includes(p));
   }
+  // Visual Identity | Promotional Design (25 Nov 2026): Popcorn Durian (identity-1) is the second part of the ShoYueMi card (identity-2).
+  // Ids stay as they were, so Chinny's edits still match; the card's title is set in website/js/edits.js.
+  const shoyu = projects.find(p => p.id === 'identity-2'), durian = projects.find(p => p.id === 'identity-1');
+  if (shoyu && durian) {
+    shoyu.parts = [{ ...shoyu.parts[0], title: "ShoYueMi Valentine's Day", meta: shoyu.tag }, { ...durian.parts[0], title: plain('card:identity-1:title', durian.title), meta: durian.tag }];
+    Object.assign(shoyu, { title: 'Visual Identity | Promotional Design', year: '2024', tag: 'Branding · Posters · Packaging · 2024',
+      intro: "Brand and promotional design: a Valentine's Day poster for Snek Ku's ShoYueMi, and the branding, poster and packaging for a durian-flavoured popcorn." });
+    projects = projects.filter(p => p !== durian);
+  }
   // A Thread of Life (17 Nov 2026): the case film, the newer poster shown big and the concept board go with the film;
   // Ah Kit (made for the merch) joins a smaller, cut-out merch picture
   const tol = projects.find(p => p.id === 'thread');
@@ -113,18 +122,23 @@
     nlp.parts = [{ ...nlp.parts[0], title: 'The comic', text: '' }, { ...nlp3d.parts[0], title: '3D environments' }]; // its words are already at the top
     projects = projects.filter(p => p !== nlp3d);
   }
-  // Drumothy (18 Nov 2026): KFC Malaysia's brainrot mascot, made at Naga DDB Tribal. First in the shop.
+  // KFC Malaysia | Socials (was Drumothy, 18 Nov 2026; renamed 25 Nov 2026): KFC Malaysia's brainrot characters and socials, made at Naga DDB Tribal. First in the shop.
   // TikTok numbers were read off the three videos on 18 Nov 2026; update them by hand when they grow.
   const DRUM = 'media/gifs/drumothy.gif';
-  projects.unshift({ id: 'drumothy', cat: 'Design', color: '#e4002b', ink: '#ffffff', accent: '#ffd23f', title: 'KFC Malaysia | Drumothy', sub: 'KFC Malaysia Official TikTok – Brainrot Character', year: '2026', cover: DRUM,
-    intro: 'Drumothy, the official brainrot mascot of KFC Malaysia, made during my internship at Naga DDB Tribal and one of my first KFC projects. The life of the party, the main character, he\'s iconic, he\'s really THAT guy. Here for a good time, not a long time! Drumothy wants you to break free, let loose and just have fun. He takes his YOLO mindset too seriously. Finger lickin\' charisma.',
-    tag: 'Character design · KFC Malaysia · Naga DDB Tribal · 2026 · 1M+ views · 110K+ likes',
+  projects.unshift({ id: 'drumothy', cat: 'Design', color: '#e4002b', ink: '#ffffff', accent: '#ffd23f', title: 'KFC Malaysia | Socials', sub: 'KFC Malaysia Official TikTok – Brainrot Characters & Socials', year: '2026', cover: DRUM,
+    intro: "Social content for KFC Malaysia, made during my internship at Naga DDB Tribal: Drumothy and Uwu-Tart, two of the brainrot characters I created for KFC Malaysia's TikTok series, and thumbnails for the Chicki birthday videos.",
+    tag: 'Character design · Social media · KFC Malaysia · Naga DDB Tribal · 2026 · 1M+ views · 110K+ likes',
     parts: [
-      { title: 'Meet Drumothy', meta: 'Mascot · 2026', media: [{ type: 'gif', src: DRUM, cutout: true, bare: true, drum: true }] },
+      { title: 'Meet Drumothy', meta: 'Brainrot character · 2026', text: 'Drumothy, the official brainrot mascot of KFC Malaysia, made during my internship at Naga DDB Tribal and one of my first KFC projects. The life of the party, the main character, he\'s iconic, he\'s really THAT guy. Here for a good time, not a long time! Drumothy wants you to break free, let loose and just have fun. He takes his YOLO mindset too seriously. Finger lickin\' charisma.',
+        media: [{ type: 'gif', src: DRUM, cutout: true, bare: true, drum: true }] },
       { title: 'Find him on TikTok', meta: '1M+ views · 110K+ likes on TikTok', text: 'A few of my favourite KFC Malaysia TikToks starring Drumothy. There are lots more on the account.',
         media: [{ type: 'tiktok', id: '7639303220254264584', cover: 'drumothy-tt-1', caption: '592K views · May 2026' },
           { type: 'tiktok', id: '7696455930380176647', cover: 'drumothy-tt-2', caption: '249K views · Oct 2026' },
-          { type: 'tiktok', id: '7657881695445683463', cover: 'drumothy-tt-3', caption: '121K views · Jul 2026' }] }
+          { type: 'tiktok', id: '7657881695445683463', cover: 'drumothy-tt-3', caption: '121K views · Jul 2026' }] },
+      { title: 'Meet Uwu-Tart', meta: 'Brainrot character · 2026', big: true, text: "An egg tart on tiny legs. Another of the brainrot characters I created for KFC Malaysia's TikTok series.",
+        media: [{ src: 'kfc-uwu-tart', cutout: true, bare: true, caption: 'Uwu-Tart' }] },
+      { title: 'Chicki Birthday', meta: 'TikTok thumbnails · May 2026', big: true, text: "Thumbnails for KFC Malaysia's Chicki birthday party videos.",
+        media: [{ src: 'kfc-chicki-1', caption: 'Meriahkan birthday si manja' }, { src: 'kfc-chicki-2', caption: 'Lebih ceria celebrate together' }, { src: 'kfc-chicki-3', caption: 'Moment berharga di KFC' }] }
     ] });
   // Prudential Malaysia (19 Nov 2026): social content made at Naga DDB Tribal, second in the shop after Drumothy.
   // The Instagram covers were saved from the posts on 19 Nov 2026 (media/img/pru-*.webp); Ep 1's is Chinny's own thumbnail.
@@ -141,8 +155,9 @@
           { type: 'tiktok', href: IG('reel/DZMimPnzEpO'), badge: 'Instagram', cover: 'pru-ep3', caption: 'Ep 3 · Reel · Jun 2026' }] },
       { title: 'Prudential Agency Awards 2025', meta: 'Key visuals · Photoshoot', text: 'Key visuals for the Million Dollar Agency and Master Wealth Planner winners, from group shots to solo portraits.',
         media: [{ src: 'pru-mda', wide: true }, { src: 'pru-mda-2' }, { src: 'pru-mda-3' }, { src: 'pru-mda-4' },
-          { src: 'pru-mwp', wide: true }, { src: 'pru-mwp-2' }, { src: 'pru-mwp-3' }, { src: 'pru-mwp-4' }, { src: 'pru-mwp-5' },
-          { src: 'pru-shoot-1', caption: 'At the photoshoot' }, { src: 'pru-shoot-2', caption: 'At the photoshoot' }, { src: 'pru-shoot-3', caption: 'At the photoshoot' }] }
+          { src: 'pru-mwp', wide: true }, { src: 'pru-mwp-2' }, { src: 'pru-mwp-3' }, { src: 'pru-mwp-4' }, { src: 'pru-mwp-5' }] },
+      { title: 'The photoshoot', meta: 'Prudential Agency Awards 2025 · Photography', text: 'Real photos I took at the Prudential Agency Awards 2025 photoshoot. A very valuable lesson for me.', big: true,
+        media: [{ src: 'pru-shoot-1', caption: 'At the photoshoot' }, { src: 'pru-shoot-2', caption: 'At the photoshoot' }, { src: 'pru-shoot-3', caption: 'At the photoshoot' }] }
     ] });
   projects.forEach((p, i) => {
     p.index = i;
@@ -479,19 +494,14 @@
     const loop = t => { draw(t); raf = on && !reduced ? requestAnimationFrame(loop) : 0; };
     new IntersectionObserver(es => { on = es[es.length - 1].isIntersecting; if (on && !raf && !reduced) raf = requestAnimationFrame(loop); }).observe(zone);
     new ResizeObserver(fit).observe(zone); fit();
-    // the poppy click (23 Nov 2026): the button squashes and springs back, and bubbles float out and pop (css "makan-bub")
-    const bubbles = () => {
+    // the poppy click: the button squashes and springs back (bubble graphics removed 25 Nov 2026)
+    const squash = () => {
       if (reduced) return;
       btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
-      for (let i = 0; i < 18; i++) {
-        const a = i / 18 * Math.PI * 2 + Math.random() * .4, d = 130 + Math.random() * 150, b = el('i', 'makan-bub');
-        b.style.cssText = `left:${cx}px;top:${cy}px;--dx:${(Math.cos(a) * d).toFixed(0)}px;--dy:${(Math.sin(a) * d * .8 - 30).toFixed(0)}px;--s:${(18 + Math.random() * 34).toFixed(0)}px;--t:${(.55 + Math.random() * .35).toFixed(2)}s;--c:${['#ff3040', '#ffffff', '#ffd23f'][i % 3]}`;
-        zone.appendChild(b); setTimeout(() => b.remove(), 1000);
-      }
     };
     btn.onclick = async () => {
       burst = performance.now(); if (reduced || !on) draw(burst);
-      bubbles();
+      squash();
       const ok = await copyMail();
       // steel, except for a moment after copying: it says "Copied" and glows red, then goes back to steel after 1.4 s
       cap.textContent = ok ? 'Copied ♥' : 'Click me'; btn.parentElement.classList.toggle('lit', ok);
@@ -885,7 +895,7 @@
   const MODELS = { 'Soda Crackers': 'media/3d/soda-crackers.glb', 'Arcade Machine': 'media/3d/arcade-machine.glb' };
   // works shown whole, as a banner across a full row of the item shop: 'Name of the work': 'picture' (in the main site's media/thumb)
   // a small picture beside a work's title on its page: 'id': 'picture' (Hands to Heart's full lion head, 23 Nov 2026)
-  const HERO_ART = { 'illustration-1': 'h2h-lion-full' };
+  const HERO_ART = {}; // Hands to Heart's lion head removed 25 Nov 2026
   const BANNERS = { 'Hands to Heart: The Dance of the Lion': 'lion-dance' };
   /* ---------- Achievements: the list, biggest first. kind: 'trophy' (an award) or 'frame' (an exhibition). ---------- */
   const ACHIEVEMENTS = [
@@ -1095,12 +1105,12 @@
     const hero = el('header', 'p-hero');
     hero.innerHTML = `<div class="wrap">
       <div class="p-hero-top"><span>${esc(p.cat)}${p.year ? ' · ' + esc(p.year) : ''}</span><span>${String(p.index + 1).padStart(2, '0')}</span></div>
-      <h1>${p.id === 'thread' ? TOL_LOGO : esc(name) + (p.zh ? `<span class="zh">${esc(p.zh)}</span>` : '')}</h1>${HERO_ART[p.id] ? `<img class="p-hero-art" src="${imgSrc(HERO_ART[p.id])}" alt="">` : ''}${p.sub ? `<p class="p-sub">${esc(p.sub)}</p>` : ''}
+      <h1>${p.id === 'thread' ? 'A Thread of Life | 爱情阿杂' : esc(name) + (p.zh ? `<span class="zh">${esc(p.zh)}</span>` : '')}</h1>${HERO_ART[p.id] ? `<img class="p-hero-art" src="${imgSrc(HERO_ART[p.id])}" alt="">` : ''}${p.sub ? `<p class="p-sub">${esc(p.sub)}</p>` : ''}
       <div class="p-hero-grid"><p class="p-intro">${esc(p.intro || '')}</p>${tags.length ? `<ul class="p-tags">${tags.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}</div></div>`;
     body.appendChild(hero);
     const multi = p.parts.filter(pt => pt.title).length > 1;
     p.parts.forEach((part, k) => {
-      const s = el('section', 'p-part wrap' + (multi ? ' multi' : '') + (part.small ? ' small' : ''));
+      const s = el('section', 'p-part wrap' + (multi ? ' multi' : '') + (part.small ? ' small' : '') + (part.big ? ' big' : ''));
       if (multi) s.innerHTML = `<aside class="p-aside"><span class="p-num">${String(k + 1).padStart(2, '0')}</span><h2>${esc(part.title)}</h2>${part.meta ? `<p class="meta">${esc(part.meta)}</p>` : ''}${part.text ? `<p class="text">${esc(part.text)}</p>` : ''}${part.link ? `<p class="text"><a class="p-link" href="${esc(part.link.href)}" target="_blank" rel="noopener">${esc(part.link.label)} ↗</a></p>` : ''}</aside>`;
       const g = s.appendChild(el('div', 'g-rows')), side = $('.p-aside', s);
       (part.media || []).forEach(m => (m.aside && side ? side : g).appendChild(galleryItem(m, part.title || name, p))); // aside: under the words on the left
@@ -1403,7 +1413,7 @@
     const W = document.documentElement.clientWidth, H = innerHeight;
     const tw = Math.min(W * .98, H * 1.1 * SCR.w / SCR.h), th = tw * SCR.h / SCR.w, left = (W - tw) / 2, top = (H - th) / 2 + H * .01; // close to the camera
     const sw = (SCR.r - SCR.l) * tw, sh = (SCR.b - SCR.t) * th, ox = (SCR.l + SCR.r) / 2 * tw, oy = (SCR.t + SCR.b) / 2 * th;
-    tv.zoom = W >= 900 && W / H > 1.15 && !reduced; // phones and tall windows: no TV around the page
+    tv.zoom = fine && W >= 900 && W / H > 1.15 && !reduced; // phones, tablets (touch) and tall windows: no TV around the page (25 Nov 2026: it glitched on iPads)
     tv.G = Math.max(W / sw, H / sh) * 1.04;          // zoom until the screen is a bit bigger than the window
     tv.k = Math.min(sw / W, sh / H);                // how small the page is inside the screen
     Object.assign(tv, { W, H, sw, sh, rad: SCR.rad * tw, c0: { x: left + ox, y: top + oy }, Z: Math.round(H * .9) });
@@ -1512,7 +1522,7 @@
   if (!FX.line) { $$('a[href="#line"]').forEach(a => a.setAttribute('href', '#all')); $('.follow').firstChild.textContent = 'See the work '; }
   // the picture tube: a black frame with bowed edges around the whole page
   if (FX.crt) document.body.insertAdjacentHTML('beforeend', '<svg class="tube" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path fill-rule="evenodd" d="M0 0H100V100H0Z M7 3.2Q50 -.8 93 3.2Q97.8 3.5 98 8.5Q101.2 50 98 91.5Q97.8 96.5 93 96.8Q50 100.8 7 96.8Q2.2 96.5 2 91.5Q-1.2 50 2 8.5Q2.2 3.5 7 3.2Z"/></svg>');
-  if (FX.crt && !EDITING) { crtCurve(); scrollOSD(); }
+  if (FX.crt && !EDITING && fine) { crtCurve(); scrollOSD(); } // touch screens skip the bent glass: too heavy while scrolling on tablets
   if (FX.crt) {
     // the tape counter on the TV at the top of the page
     $('#heroBg').insertAdjacentHTML('beforeend', '<span class="osd osd-tl" aria-hidden="true">PLAY ▶</span><span class="osd osd-tr" id="osdTime" aria-hidden="true">SP 0:00:00</span>');

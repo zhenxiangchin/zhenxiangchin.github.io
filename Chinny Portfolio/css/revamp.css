@@ -621,6 +621,7 @@ html.editing .stk-deco{pointer-events:auto}
 .p-aside .g-item .g-pic img{width:100%;height:auto;max-height:none}
 .p-aside .g-video.tall video{width:100%}
 .p-part.small .g-rows{--row:120px}
+.p-part.big .g-rows{--row:380px} /* bigger pictures (part big: true, e.g. the Prudential photoshoot) */
 .p-part.small .g-item.bare{max-width:240px}
 /* the arcade machine's page: its 3D model up close (js/model3d.js viewer). Drag to turn, wheel to zoom. */
 .g-item.g-model{cursor:grab;background:radial-gradient(ellipse at 50% 45%,rgba(255,255,255,.08),transparent 70%)}
@@ -638,14 +639,9 @@ html.editing .stk-deco{pointer-events:auto}
 /* 23 Nov 2026: pictures with a see-through background (media `cutout: true`) are shown truly see-through on project pages, no coloured box */
 .g-item.cut{background:none}
 .g-item.cut .g-pic img{width:100%;height:100%}
-/* 23 Nov 2026: "Click me" pops: a squash-and-spring bounce, and bubbles that float out and burst (makanButton in site.js) */
+/* 23 Nov 2026: "Click me" pops: a squash-and-spring bounce (makanButton in site.js) */
 .makan-btn.pop{animation:makan-pop .6s cubic-bezier(.2,1.6,.4,1)}
 @keyframes makan-pop{0%{scale:1}18%{scale:1.16 .82}42%{scale:.9 1.12}64%{scale:1.05 .96}82%{scale:.98 1.02}100%{scale:1}}
-.makan-bub{position:absolute;z-index:2;width:var(--s);height:var(--s);margin:calc(var(--s) / -2) 0 0 calc(var(--s) / -2);border-radius:50%;pointer-events:none;
-  background:radial-gradient(circle at 32% 30%,#fff 0 18%,transparent 24%),radial-gradient(circle,transparent 52%,var(--c) 56% 64%,transparent 68%),color-mix(in srgb,var(--c) 22%,transparent);
-  animation:makan-bub var(--t) cubic-bezier(.15,.8,.3,1) forwards}
-@keyframes makan-bub{0%{transform:translate(0,0) scale(.2);opacity:1}70%{transform:translate(var(--dx),var(--dy)) scale(1);opacity:1}
-  85%{transform:translate(var(--dx),var(--dy)) scale(1.35);opacity:.8}100%{transform:translate(var(--dx),var(--dy)) scale(1.6);opacity:0}}
 /* 23 Nov 2026: phones — the film's play button and gold sticker shrink to fit the small player (the sticker's edit-mode size is for big screens only) */
 @media (max-width:700px){
   .film-player .stk-gold{min-width:0;width:15%;top:-12px;right:-8px;zoom:1!important}
