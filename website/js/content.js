@@ -173,12 +173,12 @@ window.PORTFOLIO = {
           media: [ { src: 'shoyuemi', caption: 'ShoYueMi · Valentine\'s Day poster · 2024' } ]
         },
         {
-          title: 'Product Design', cover: 'rhino-phone', meta: '2024',
+          title: 'Product Design', cover: 'rhino-phone', meta: '2024', row: 560,
           text: 'Red packet design for the Year of the Snake, and “Toxic Beauty”, my Top 30 phone case for Rhinoshield × MIA Creative Jam 2024: an awareness piece about a beautiful ocean full of toxic waste.',
-          media: [ { src: 'redpacket-page', wide: true }, { src: 'rhino-phone', caption: 'Toxic Beauty · Rhinoshield × MIA', cutout: true } ]
+          media: [ { src: 'angpao', caption: 'Red packet · Year of the Snake', cutout: true }, { src: 'rhino-phone', caption: 'Toxic Beauty · Rhinoshield × MIA', cutout: true } ]
         },
         {
-          title: 'Poster Design', cover: 'fight-fright', meta: '2024',
+          title: 'Poster Design', cover: 'fight-fright', meta: '2024', row: 560,
           text: 'Fight or Fright: a concept poster for a monster wrestling TV show set in the year 4024. If you see this, meowzilla said meow :3. Plus a newsprint poster on illustrator and animator Yoneyama Mai.',
           media: [ { src: 'poster-fight-fright', caption: 'Fight or Fright' }, { src: 'poster-yoneyama', caption: 'Yoneyama Mai' } ]
         },
@@ -212,7 +212,7 @@ window.PORTFOLIO = {
           media: [ { src: 'hm-cover', caption: 'Cover' }, { src: 'hm-book', cutout: true }, { src: 'hm-p01' }, { src: 'hm-p03' }, { src: 'hm-p06' }, { src: 'hm-p07' }, { src: 'hm-p16' }, { src: 'hm-p24' }, { src: 'hm-p25' } ]
         },
         {
-          title: 'New Life Project', download: { file: 'media/books/new-life-project.pdf', label: 'Download the full comic (PDF, 19 MB)' }, meta: 'Comic book · Dystopian tragedy (sci-fi drama) · 39 pages · 2025',
+          title: 'New Life Project', row: 380, download: { file: 'media/books/new-life-project.pdf', label: 'Download the full comic (PDF, 19 MB)' }, meta: 'Comic book · Dystopian tragedy (sci-fi drama) · 39 pages · 2025',
           text: 'In a future doomed by meteor showers, the government introduces the New Life Project: a chance to upload one\'s mind into a perfect virtual world. Behind the scenes it funds the escape of the privileged. A mother chooses this digital eternity, leaving her child behind. The son keeps living quietly in the real world, and still loves his mom.',
           media: [ { src: 'nlp-cover', caption: 'Cover' }, { src: 'nlp-1' }, { src: 'nlp-2' }, { src: 'nlp-5' }, { src: 'nlp-3' }, { src: 'nlp-4' }, { src: 'nlp-6' }, { src: 'nlp-7' } ]
         }

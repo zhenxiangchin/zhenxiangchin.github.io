@@ -193,7 +193,6 @@ window.PORTFOLIO_EDITS = {
   },
   "img": {
     "card:sketchbook:cover": "media/uploads/card-sketchbook-cover-mvb4cd1d.webp",
-    "card:identity-3:cover": "media/uploads/card-identity-3-cover-mvb4cd1d.webp",
     "card:identity-4:cover": "media/uploads/card-identity-4-cover-mvb4cd1d.webp",
     "card:publications-2:cover": "media/uploads/card-publications-2-cover-mvb4cd1d.webp",
     "card:publications-1:cover": "media/uploads/card-publications-1-cover-mvb4cd1d.webp",

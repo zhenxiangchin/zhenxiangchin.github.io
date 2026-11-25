@@ -93,7 +93,7 @@
   // Ids stay as they were, so Chinny's edits still match; the card's title is set in website/js/edits.js.
   const shoyu = projects.find(p => p.id === 'identity-2'), durian = projects.find(p => p.id === 'identity-1');
   if (shoyu && durian) {
-    shoyu.parts = [{ ...shoyu.parts[0], title: "ShoYueMi Valentine's Day", meta: shoyu.tag }, { ...durian.parts[0], title: plain('card:identity-1:title', durian.title), meta: durian.tag }];
+    shoyu.parts = [{ ...shoyu.parts[0], title: "ShoYueMi Valentine's Day", meta: shoyu.tag, row: 560 }, { ...durian.parts[0], title: plain('card:identity-1:title', durian.title), meta: durian.tag, row: 300 }];
     Object.assign(shoyu, { title: 'Visual Identity | Promotional Design', year: '2024', tag: 'Branding · Posters · Packaging · 2024',
       intro: "Brand and promotional design: a Valentine's Day poster for Snek Ku's ShoYueMi, and the branding, poster and packaging for a durian-flavoured popcorn." });
     projects = projects.filter(p => p !== durian);
@@ -1113,6 +1113,7 @@
       const s = el('section', 'p-part wrap' + (multi ? ' multi' : '') + (part.small ? ' small' : '') + (part.big ? ' big' : ''));
       if (multi) s.innerHTML = `<aside class="p-aside"><span class="p-num">${String(k + 1).padStart(2, '0')}</span><h2>${esc(part.title)}</h2>${part.meta ? `<p class="meta">${esc(part.meta)}</p>` : ''}${part.text ? `<p class="text">${esc(part.text)}</p>` : ''}${part.link ? `<p class="text"><a class="p-link" href="${esc(part.link.href)}" target="_blank" rel="noopener">${esc(part.link.label)} ↗</a></p>` : ''}</aside>`;
       const g = s.appendChild(el('div', 'g-rows')), side = $('.p-aside', s);
+      if (part.row) { g.classList.add('sized'); g.style.setProperty('--sized', part.row + 'px'); } // bigger pictures (not on phones, css)
       (part.media || []).forEach(m => (m.aside && side ? side : g).appendChild(galleryItem(m, part.title || name, p))); // aside: under the words on the left
       g.appendChild(el('i', 'g-fill'));
       if (part.download) s.appendChild(el('p', 'p-download', `<a class="btn" href="${site(part.download.file)}" download>${esc(part.download.label)} ↓</a>`)); // the whole book, under its pictures
@@ -1177,7 +1178,7 @@
      ========================================================= */
   const canvas = $('#ropes'), ctx = canvas.getContext('2d');
   let dpr = 1;
-  function sizeCanvas() { const k = dpr = Math.min(2, devicePixelRatio || 1); canvas.width = innerWidth * k; canvas.height = innerHeight * k; ctx.setTransform(k, 0, 0, k, 0, 0); }
+  function sizeCanvas() { const k = dpr = Math.min(2, devicePixelRatio || 1); canvas.width = innerWidth * k; canvas.height = (canvas.clientHeight || innerHeight) * k; ctx.setTransform(k, 0, 0, k, 0, 0); }
   let lastY = scrollY, lastT = 0, acc = 0, drew = false;
   const nav = $('#nav');
   function frame(t) {
@@ -1194,7 +1195,7 @@
     const heroOn = puppet && scrollY < G.heroTop + G.heroH + 100;
     const cordOn = cord && cord.shown && G.cz && scrollY + innerHeight > G.cz.t - 300 && scrollY < G.cz.b + 300;
     if (heroOn || cordOn || drew) {
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, innerWidth, innerHeight); drew = false;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr); drew = false;
       ctx.setTransform(dpr * TVM.s, 0, 0, dpr * TVM.s, dpr * TVM.a, dpr * TVM.b);
       ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#e8262b'; ctx.lineWidth = 2.4;
       if (heroOn) { const r = puppet.rope, oy = scrollY - G.heroTop; if (r.p[r.p.length - 1].y - oy > -20) { drawRope(ctx, r, scrollX, oy); drew = true; } }
@@ -1459,8 +1460,11 @@
   requestAnimationFrame(frame);
   addEventListener('load', sizeSoon);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeSoon);
-  let rw = innerWidth;
+  let rw = innerWidth, lastW = innerWidth, lastH = canvas.clientHeight; // canvas: 100vh, which a browser bar doesn't change
   addEventListener('resize', () => {
+    // touch screens: a change of height only is the browser bar sliding in or out while scrolling; rebuilding then made the page jump
+    if (!fine && innerWidth === lastW && canvas.clientHeight === lastH) return;
+    lastW = innerWidth; lastH = canvas.clientHeight;
     sizeCanvas(); sizeTV();
     if (Math.abs(innerWidth - rw) > 40 && puppet) { rw = innerWidth; puppet.anchor.x = narrow() ? innerWidth * .8 : innerWidth - Math.max(120, innerWidth * .09); }
     sizeSoon();

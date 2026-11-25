@@ -640,3 +640,12 @@ html.editing .stk-deco{pointer-events:auto}
 .p-download{margin:28px 0 0}
 .p-part.multi .p-download{grid-column:2}
 @media (max-width:1000px){.p-part.multi .p-download{grid-column:1}}
+
+/* 26 Nov 2026: a part with `row` gets taller picture rows */
+@media (min-width:701px){.p-part .g-rows.sized{--row:var(--sized)}}
+
+/* 26 Nov 2026, phones and tablets: the black tube frame keeps one height while the browser bar slides, and the page doesn't bounce past its ends */
+@media not all and (hover:hover) and (pointer:fine){
+  html{overscroll-behavior-y:none}
+  .tube{bottom:auto;height:100vh;height:100lvh}
+}
