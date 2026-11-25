@@ -86,7 +86,7 @@
   if (illo.length > 1) {
     illo[0].parts = illo.map(w => ({ ...w.parts[0], title: plain('card:' + w.id + ':title', w.title), meta: w.tag }));
     Object.assign(illo[0], { title: 'Illustration Works', year: '2025', tag: 'Illustration · Pixel art · Fan art · 2022 – 2025',
-      intro: 'Personal illustrations from 2022 to 2025: a monster market, a breakfast, pixel art, a self portrait in colour, and characters I love.' });
+      intro: 'Personal illustrations from 2022 to 2025: a monster market, a breakfast, pixel art, and characters I love.' });
     projects = projects.filter(p => !illo.slice(1).includes(p));
   }
   // Visual Identity | Promotional Design (25 Nov 2026): Popcorn Durian (identity-1) is the second part of the ShoYueMi card (identity-2).
@@ -156,7 +156,7 @@
       { title: 'Prudential Agency Awards 2025', meta: 'Key visuals · Photoshoot', text: 'Key visuals for the Million Dollar Agency and Master Wealth Planner winners, from group shots to solo portraits.',
         media: [{ src: 'pru-mda', wide: true }, { src: 'pru-mda-2' }, { src: 'pru-mda-3' }, { src: 'pru-mda-4' },
           { src: 'pru-mwp', wide: true }, { src: 'pru-mwp-2' }, { src: 'pru-mwp-3' }, { src: 'pru-mwp-4' }, { src: 'pru-mwp-5' }] },
-      { title: 'The photoshoot', meta: 'Prudential Agency Awards 2025 · Photography', text: 'Real photos I took at the Prudential Agency Awards 2025 photoshoot. A very valuable lesson for me.', big: true,
+      { title: 'The photoshoot', meta: 'Prudential Agency Awards 2025 · Photography', text: 'My experience at Prudential Agency Awards 2025 photoshoot.', big: true,
         media: [{ src: 'pru-shoot-1', caption: 'At the photoshoot' }, { src: 'pru-shoot-2', caption: 'At the photoshoot' }, { src: 'pru-shoot-3', caption: 'At the photoshoot' }] }
     ] });
   projects.forEach((p, i) => {
@@ -1115,6 +1115,7 @@
       const g = s.appendChild(el('div', 'g-rows')), side = $('.p-aside', s);
       (part.media || []).forEach(m => (m.aside && side ? side : g).appendChild(galleryItem(m, part.title || name, p))); // aside: under the words on the left
       g.appendChild(el('i', 'g-fill'));
+      if (part.download) s.appendChild(el('p', 'p-download', `<a class="btn" href="${site(part.download.file)}" download>${esc(part.download.label)} ↓</a>`)); // the whole book, under its pictures
       body.appendChild(s);
     });
     const nx = projects[(p.index + 1) % projects.length];
@@ -1273,116 +1274,33 @@
   // where the screen is in tv.webp (1745 x 1218), as shares of its width / height
   const SCR = { w: 1745, h: 1218, l: 283 / 1745, t: 124 / 1218, r: 1459 / 1745, b: 1026 / 1218, rad: 74 / 1745 };
   let tv = null;
-  /* The stickers on the TV. TO ADD ONE: put its picture in media/tv (black lines on white, see-through around the shape)
+  /* The stickers on the TV. TO ADD ONE: put its picture in media/tv (see-through around the shape; its white parts become foil)
      and copy a line below.
        at   = where it sits on the TV picture (share of the TV's width / height) and its tilt
        foil = 'gold' (mirror gold) or 'holo' (rainbow)
-       note = what is printed under it, seen when it peels
-       go   = what a click does. Leave it out and a click just peels the sticker to show the note. */
+       name = what a screen reader calls it
+       go   = what a click does. Leave it out and the sticker is just for looking at.
+     They don't peel off (Chinny, 25 Nov 2026). */
   const playFilm = () => {
     let y = -40; for (let n = $('#film'); n; n = n.offsetParent) y += n.offsetTop;
     scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
     if (!$('#filmPlayer').classList.contains('playing')) $('#filmPlay').click();
   };
   const STICKERS = [
-    // both sit wholly on the flat speaker grilles (a sticker across the raised screen edge looked like it was floating)
-    { pic: 'sticker-thread.webp', foil: 'gold', at: 'left:89.4%;top:21%;width:9.8%;--r:8deg', note: 'A Thread<br>of Life<small>animated short ▶</small>', go: playFilm },
-    { pic: 'sticker-logo.webp', foil: 'holo', at: 'left:1%;top:67.5%;width:9.6%;--r:7deg', note: 'Chinny\'s Portfolio<small>2026</small>' },
+    // all sit wholly on the flat speaker grilles (a sticker across the raised screen edge looked like it was floating)
+    { pic: 'sticker-thread.webp', foil: 'gold', at: 'left:89.4%;top:21%;width:9.8%;--r:8deg', name: 'A Thread of Life, animated short: play it', go: playFilm },
+    { pic: 'sticker-logo.webp', foil: 'holo', at: 'left:1%;top:67.5%;width:9.6%;--r:7deg' },
+    { pic: 'sticker-astronaut.webp', foil: 'holo', at: 'left:89.6%;top:58%;width:9.6%;--r:-7deg' },
   ];
   const stickerFace = pic => `<span class="stk-face"><span class="stk-in" style="-webkit-mask-image:url(media/tv/${pic});mask-image:url(media/tv/${pic})"><img src="media/tv/${pic}" alt=""></span></span>`;
-  /* The peel, like a real sticker: a fold line runs halfway between the corner you grab and where you've pulled it.
-     The sticker beyond the line stays stuck; the part you've lifted flips over it and shows its silver back.
-     Hover: the bottom-right corner curls up a little. Drag: peel from the nearest corner. Let go past halfway and it comes
-     right off, showing what's printed underneath (click that to open it). A plain click peels it off too, and a second
-     click opens what's under it, so it works from the keyboard. It sticks itself back down a moment after the mouse leaves. */
-  const HOVER_CURL = .36; // how far the corner lifts on hover (share of the sticker's size)
-  // the part of the box [0,w]x[0,h] on one side of the line X·n = m (side +1 or -1), as a clip-path
-  function halfBox(w, h, n, m, side) {
-    const box = [[0, 0], [w, 0], [w, h], [0, h]], out = [];
-    for (let i = 0; i < 4; i++) {
-      const a = box[i], c = box[(i + 1) % 4], da = side * (a[0] * n.x + a[1] * n.y - m), dc = side * (c[0] * n.x + c[1] * n.y - m);
-      if (da >= 0) out.push(a);
-      if ((da >= 0) !== (dc >= 0)) { const t = da / (da - dc); out.push([a[0] + (c[0] - a[0]) * t, a[1] + (c[1] - a[1]) * t]); }
-    }
-    return out.length > 2 ? `polygon(${out.map(q => q[0].toFixed(1) + 'px ' + q[1].toFixed(1) + 'px').join(',')})` : 'polygon(0 0,0 0,0 0)';
-  }
   function sticker(s) {
-    const mask = `-webkit-mask-image:url(media/tv/${s.pic});mask-image:url(media/tv/${s.pic})`;
-    const b = el('button', `stk stk-${s.foil}${s.go ? ' stk-go' : ''}`, `<span class="stk-note">${s.note}</span>${stickerFace(s.pic)}<span class="stk-flap" aria-hidden="true"><span class="stk-back" style="${mask}"></span></span>`);
-    b.type = 'button'; b.style.cssText = s.at; b.setAttribute('aria-label', s.note.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '));
-    const face = $('.stk-face', b), flap = $('.stk-flap', b), back = $('.stk-back', b);
-    const st = { c: { x: 0, y: 0 }, p: { x: 0, y: 0 }, raf: 0, drag: null };
-    // draw the fold: corner c pulled to p (in the sticker's own pixels)
-    const fold = () => {
-      const w = b.offsetWidth, h = b.offsetHeight, { c, p } = st, dx = p.x - c.x, dy = p.y - c.y, L = Math.hypot(dx, dy);
-      b.classList.toggle('open', L > 2);
-      if (L < .5 || !w) { face.style.clipPath = back.style.clipPath = back.style.transform = ''; flap.style.visibility = 'hidden'; return; }
-      const n = { x: dx / L, y: dy / L }, m = ((c.x + p.x) * n.x + (c.y + p.y) * n.y) / 2;
-      face.style.clipPath = halfBox(w, h, n, m, 1);                    // what stays stuck
-      back.style.clipPath = halfBox(w, h, n, m, -1);                   // what's lifted ...
-      back.style.transform = `matrix(${1 - 2 * n.x * n.x},${-2 * n.x * n.y},${-2 * n.x * n.y},${1 - 2 * n.y * n.y},${2 * m * n.x},${2 * m * n.y})`; // ... flipped over the fold
-      // the silver: a bright line along the fold, darker towards the lifted tip
-      const ang = Math.atan2(-n.x, n.y), Lg = Math.abs(w * Math.sin(ang)) + Math.abs(h * Math.cos(ang)), u = Math.max(w, h);
-      const s0 = -m + (w / 2 * n.x + h / 2 * n.y) + Lg / 2, at = k => (s0 + k * u).toFixed(1) + 'px';
-      back.style.backgroundImage = `linear-gradient(${(ang * 180 / Math.PI).toFixed(1)}deg,#8c9199 ${at(0)},#ffffff ${at(.035)},#dfe2e6 ${at(.09)},#a2a7af ${at(.3)},#e9ebee ${at(.55)},#8a9098 ${at(.95)})`;
-      flap.style.visibility = 'visible';
-    };
-    const go = (to, then) => {
-      cancelAnimationFrame(st.raf);
-      const from = { ...st.p }, t0 = performance.now(), D = reduced ? 1 : 320;
-      const step = now => {
-        const k = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - k, 3);
-        st.p = { x: from.x + (to.x - from.x) * e, y: from.y + (to.y - from.y) * e }; fold();
-        if (k < 1) st.raf = requestAnimationFrame(step); else if (then) then();
-      };
-      st.raf = requestAnimationFrame(step);
-    };
-    const corner = () => ({ x: b.offsetWidth, y: b.offsetHeight });
-    const curl = () => ({ x: st.c.x + (b.offsetWidth / 2 - st.c.x) * HOVER_CURL * 2, y: st.c.y + (b.offsetHeight / 2 - st.c.y) * HOVER_CURL * 2 });
-    const offAll = () => ({ x: st.c.x + (b.offsetWidth - 2 * st.c.x) * 2.3, y: st.c.y + (b.offsetHeight - 2 * st.c.y) * 2.3 }); // the fold goes past the far side
-    const peelOff = () => { b.classList.add('peeled'); go(offAll(), () => b.classList.add('gone')); };
-    const stickBack = () => { b.classList.remove('peeled', 'gone'); go(st.c); };
-    // where the pointer is, in the sticker's own pixels (it is tilted by --r and scaled with the TV)
-    const local = e => {
-      const r = b.getBoundingClientRect(), w = b.offsetWidth, h = b.offsetHeight, a = (parseFloat(getComputedStyle(b).getPropertyValue('--r')) || 0) * Math.PI / 180;
-      const k = r.width / (w * Math.abs(Math.cos(a)) + h * Math.abs(Math.sin(a))), x = (e.clientX - r.left - r.width / 2) / k, y = (e.clientY - r.top - r.height / 2) / k;
-      return { x: x * Math.cos(a) + y * Math.sin(a) + w / 2, y: -x * Math.sin(a) + y * Math.cos(a) + h / 2 };
-    };
-    b.onpointerenter = e => { clearTimeout(b.t); if (e.pointerType === 'mouse' && !st.drag && !b.classList.contains('peeled')) { st.c = corner(); go(curl()); } };
-    b.onpointerleave = () => {
-      if (st.drag) return;
-      if (b.classList.contains('peeled')) b.t = setTimeout(stickBack, 1500); // it sticks itself back down
-      else go(st.c);
-    };
-    b.onpointerdown = e => {
-      b.dragged = false;
-      if (e.button || b.classList.contains('peeled') || (tv && tv.node.classList.contains('gating'))) return;
-      const q = local(e), w = b.offsetWidth, h = b.offsetHeight, c = { x: q.x < w / 2 ? 0 : w, y: q.y < h / 2 ? 0 : h };
-      if (c.x !== st.c.x || c.y !== st.c.y) { st.c = c; st.p = { ...c }; }     // a different corner from the hover curl: start it flat
-      cancelAnimationFrame(st.raf);
-      st.drag = { dx: st.p.x - q.x, dy: st.p.y - q.y, moved: 0, x: e.clientX, y: e.clientY };
-      b.setPointerCapture(e.pointerId);
-    };
-    b.onpointermove = e => {
-      const d = st.drag; if (!d) return;
-      d.moved = Math.max(d.moved, Math.hypot(e.clientX - d.x, e.clientY - d.y));
-      if (d.moved < 4) return;
-      const q = local(e); st.p = { x: q.x + d.dx, y: q.y + d.dy }; fold();
-    };
-    b.onpointerup = b.onpointercancel = () => {
-      const d = st.drag; if (!d) return; st.drag = null;
-      if (d.moved < 4) return; // a click: onclick handles it
-      b.dragged = true;
-      const w = b.offsetWidth, h = b.offsetHeight, n = { x: st.p.x - st.c.x, y: st.p.y - st.c.y };
-      // past halfway (the middle of the sticker is on the lifted side of the fold)? then it comes off
-      if ((w / 2 - (st.c.x + st.p.x) / 2) * n.x + (h / 2 - (st.c.y + st.p.y) / 2) * n.y < 0) peelOff(); else go(b.matches(':hover') ? curl() : st.c);
-    };
+    const b = el(s.go ? 'button' : 'span', `stk stk-${s.foil}${s.go ? '' : ' stk-still'}`, stickerFace(s.pic));
+    b.style.cssText = s.at;
+    if (!s.go) { b.setAttribute('aria-hidden', 'true'); return b; }
+    b.type = 'button'; b.setAttribute('aria-label', s.name);
     b.onclick = e => {
       if (tv && tv.node.classList.contains('gating')) return; // on the enter screen a click on the TV just enters
-      e.stopPropagation();
-      if (b.dragged) { b.dragged = false; return; }
-      if (!b.classList.contains('peeled')) { if (!st.c.x && !st.c.y) st.c = corner(); peelOff(); }
-      else if (s.go) s.go(); else stickBack();
+      e.stopPropagation(); s.go();
     };
     return b;
   }

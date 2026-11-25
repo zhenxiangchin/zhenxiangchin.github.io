@@ -123,14 +123,14 @@ window.PORTFOLIO = {
           text: 'Life in an underground city where monsters have built their own society. Each creature in the bustling marketplace works hard to make a living in their own unique way.',
           media: [ { src: 'morning-market', wide: true } ]
         },
-        { title: 'Ideal Breakfast', meta: '2024', text: 'I\'m really hungry… Am I? I\'m not sure ˙𐃷˙', media: [ { src: 'ideal-breakfast', wide: true } ] },
+        { title: 'Ideal Breakfast', meta: '2024', text: 'I\'m really hungry… Am I? I\'m not sure ˙𐃷˙', media: [ { src: 'ideal-breakfast', wide: true, left: true } ] },
         {
-          title: 'Pixel Art & Self Expression', meta: '2024',
-          text: 'Pixel art of Vi from League of Legends and a snowy Christmas holiday. Self Expression is an experimental piece: a colourful image that keeps its colours harmonious, with flowers I love and a girl who shaped who I am today.',
+          title: 'Pixel Art & Self Expression', meta: '2024', big: true,
+          text: 'Pixel art of Vi from League of Legends and a snowy Christmas holiday.',
           media: [ { src: 'pixel-vi', caption: 'Vi · pixel art', pixel: true }, { src: 'pixel-snow', caption: 'Snowy Christmas · pixel art', pixel: true }, { src: 'self-expression', caption: 'Self Expression' } ]
         },
         {
-          title: 'Characters & Fan Art', meta: '2022 – 2025',
+          title: 'Characters & Fan Art', meta: '2022 – 2025', big: true,
           media: [
             { src: 'fruity-buddies', caption: 'Fruity Buddies! · 2025 · an OC who loves fruit, plus her little buddies :D' },
             { src: 'lookback', caption: 'Lookback fan art · 2025' },
@@ -202,17 +202,17 @@ window.PORTFOLIO = {
       intro: 'Comic books and an interactive visual novel, 2023 to 2025.',
       projects: [
         {
-          title: 'SMILE', meta: 'Comic book · Romance, horror · 13 pages · 2023',
+          title: 'SMILE', download: { file: 'media/books/smile.pdf', label: 'Download the full comic (PDF, 19 MB)' }, meta: 'Comic book · Romance, horror · 13 pages · 2023',
           text: 'In a world devastated by an apocalypse, overwhelming emotions can transform humans into monstrous beings. Smile follows two characters: one immune to the curse, and another with great control of his emotions. Together they navigate the ruins, confronting the horrors outside and the struggles within, discovering the true cost of holding back what they feel.',
           media: [ { src: 'smile-cover', caption: 'Cover' }, { src: 'smile-p1' }, { src: 'smile-p2' }, { src: 'smile-p3' }, { src: 'smile-p4', wide: true } ]
         },
         {
-          title: 'Haunted Mansion', meta: 'Interactive visual novel · Horror · 43 pages · 2025',
+          title: 'Haunted Mansion', download: { file: 'media/books/haunted-mansion.pdf', label: 'Download the full storybook (PDF, 20 MB)' }, meta: 'Interactive visual novel · Horror · 43 pages · 2025',
           text: 'A girl gets lost in the forest. Eventually she stumbles across an abandoned hut which brings her into a mysterious mansion. What does she do next? It\'s up to you…',
-          media: [ { src: 'hm-cover', caption: 'Cover' }, { src: 'hm-book', cutout: true }, { src: 'hm-1' }, { src: 'hm-2' }, { src: 'hm-3' }, { src: 'hm-4' } ]
+          media: [ { src: 'hm-cover', caption: 'Cover' }, { src: 'hm-book', cutout: true }, { src: 'hm-p01' }, { src: 'hm-p03' }, { src: 'hm-p06' }, { src: 'hm-p07' }, { src: 'hm-p16' }, { src: 'hm-p24' }, { src: 'hm-p25' } ]
         },
         {
-          title: 'New Life Project', meta: 'Comic book · Dystopian tragedy (sci-fi drama) · 39 pages · 2025',
+          title: 'New Life Project', download: { file: 'media/books/new-life-project.pdf', label: 'Download the full comic (PDF, 19 MB)' }, meta: 'Comic book · Dystopian tragedy (sci-fi drama) · 39 pages · 2025',
           text: 'In a future doomed by meteor showers, the government introduces the New Life Project: a chance to upload one\'s mind into a perfect virtual world. Behind the scenes it funds the escape of the privileged. A mother chooses this digital eternity, leaving her child behind. The son keeps living quietly in the real world, and still loves his mom.',
           media: [ { src: 'nlp-cover', caption: 'Cover' }, { src: 'nlp-1' }, { src: 'nlp-2' }, { src: 'nlp-5' }, { src: 'nlp-3' }, { src: 'nlp-4' }, { src: 'nlp-6' }, { src: 'nlp-7' } ]
         }
@@ -292,16 +292,16 @@ window.PORTFOLIO = {
           cover: 'illuspeak-group',
           text: 'Illuspeak was the Malaysian Institute of Art Illustration Diploma Show 2026 at GMBB. I showed A Thread of Life in my own booth, curated the event website and made a digital stamp hunt minigame for visitors. I also took home the Master of Everything Award and a Special Mention Award.',
           parts: [
-            { title: 'My booth', meta: 'A Thread of Life',
-              media: [ { src: 'tol-illuspeak-1', wide: true }, { src: 'tol-illuspeak-2' }, { src: 'tol-illuspeak-3' }, { src: 'tol-illuspeak-4' },
-                { src: 'tol-illuspeak-5' }, { src: 'tol-illuspeak-6' }, { src: 'tol-illuspeak-7' } ] },
+            { title: 'The show', meta: 'GMBB · Jul 2026',
+              media: [ { src: 'illuspeak-group', wide: true }, { src: 'illuspeak-poster', caption: 'Event poster' }, { src: 'illuspeak-group-2' } ] },
             { title: 'Digital stamp hunt', meta: 'Event website · Minigame',
               text: 'I curated the event website and made a stamp hunt for it. Six hidden QR stamps, drawn by me, were placed around the show for visitors to find and scan.',
               link: { href: 'https://illuspeak.netlify.app/', label: 'illuspeak.netlify.app' },
               media: [ { src: 'illuspeak-site', caption: 'The event website' }, { src: 'illuspeak-stamp-1', bare: true }, { src: 'illuspeak-stamp-2', bare: true }, { src: 'illuspeak-stamp-3', bare: true },
                 { src: 'illuspeak-stamp-4', bare: true }, { src: 'illuspeak-stamp-5', bare: true }, { src: 'illuspeak-stamp-6', bare: true } ] },
-            { title: 'The show', meta: 'GMBB · Jul 2026',
-              media: [ { src: 'illuspeak-group', wide: true }, { src: 'illuspeak-poster', caption: 'Event poster' }, { src: 'illuspeak-group-2' } ] }
+            { title: 'My booth', meta: 'A Thread of Life',
+              media: [ { src: 'tol-illuspeak-1', wide: true }, { src: 'tol-illuspeak-2' }, { src: 'tol-illuspeak-3' }, { src: 'tol-illuspeak-4' },
+                { src: 'tol-illuspeak-5' }, { src: 'tol-illuspeak-6' }, { src: 'tol-illuspeak-7' } ] }
           ]
         }
       ]
