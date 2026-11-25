@@ -1,14 +1,18 @@
 /* The chrome "chinny" logo, live in 3D (three.js, kept in vendor/three).
    The model is media/logo/chinny-logo.glb, exported from portoflio/blender/chinny-logo.blend.
    The logo tilts toward the mouse, so the chrome reflections slide across the letters; on phones it sways by itself.
-   The letters fly in from Chinny's scattered keyframe (logo-01.png) when it first shows, and again after ENTER (site.js calls .replay()).
+   The letters light up as neon when it first shows, and again after ENTER (site.js calls .replay() and the enter screen's .powerOff()).
    If 3D can't run (very old browser, "reduce motion" switched on), the still picture media/logo/chinny-chrome-still.webp shows instead. */
 import * as THREE from 'three';
 import { GLTFLoader } from '../vendor/three/addons/loaders/GLTFLoader.js';
 
-// where each letter starts, relative to where it lands (model units, measured from logo-01.png against logo-02.png)
-const FROM = { L_c: [-0.049, -0.057], L_h: [0.067, 0.179], L_i: [-0.112, -0.268], L_dot: [0.051, 0.208], L_n1: [0.076, 0.212], L_n2: [0, 0], L_y: [0.092, 0.223] };
-const FLY = 1500; // ms
+/* the light-up (after kxdgraphics' retro logo reel): each slanted letter strikes on as a neon bar, left to right,
+   the dot of the i snaps on, the neon cools into chrome, then PORTFOLIO blinks on. powerOff() switches it off like an old TV. */
+const NEON = ['#3b4bff', '#8a3dff', '#ff3fb4', '#ff3b3b', '#ff8a1f', '#ffd21f']; // blue to yellow, left to right, like the reel
+const GLOW = 'rgba(255,150,210,.7)';
+const STEP = 110, SNAP = 150 + 6 * STEP + 150, COOL = 450; // ms: gap between letters, when the dot snaps on, how long the neon takes to cool
+const FLICK = [1, 0, 1, .25, 1]; // a tube catching: brightness for each 30 ms after it strikes
+const OFF = [.7, .35, .55, .2, .08, 0]; // switching off: brightness for each 70 ms
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
 // the world the chrome reflects: blue sky, a bright horizon, a dark band under it, a light floor (the same idea as the Blender render)
@@ -63,9 +67,9 @@ function streakMap() {
   const t = new THREE.CanvasTexture(c); t.anisotropy = 8; t.wrapS = t.wrapT = THREE.RepeatWrapping;
   return t;
 }
-function metalwork(mat, lo, size) {
+function metalwork(mats, lo, size) {
   const marks = streakMap();
-  mat.onBeforeCompile = sh => {
+  mats.forEach(mat => mat.onBeforeCompile = sh => {
     Object.assign(sh.uniforms, { uLo: { value: lo }, uSize: { value: size }, uMarks: { value: marks } });
     sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute vec3 aRest;\nvarying vec3 vRest;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvRest = aRest;');
@@ -84,7 +88,7 @@ diffuseColor.rgb *= 1. + mark * .45;`)
       .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor = clamp(roughnessFactor + .07 - mark * .12, 0., 1.);')
       .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
 normal = logoBump(-vViewPosition, normal, mark * uSize.y * .00004, faceDirection);`);
-  };
+  });
 }
 
 // the mouse, shared by every logo on the page
@@ -104,8 +108,8 @@ function mount(img, model) {
   const lo = new THREE.Vector3(Infinity, Infinity, Infinity), hi = lo.clone().negate();
   model.traverse(n => {
     if (!n.isMesh) return;
-    const m = new THREE.Mesh(n.geometry, mat); m.position.copy(n.position); m.quaternion.copy(n.quaternion); m.scale.copy(n.scale);
-    rig.add(m); parts.push({ m, home: n.position.clone(), from: FROM[n.name] || [0, 0] });
+    const m = new THREE.Mesh(n.geometry, mat.clone()); m.position.copy(n.position); m.quaternion.copy(n.quaternion); m.scale.copy(n.scale); // each letter glows on its own
+    rig.add(m); parts.push({ m, dot: n.name === 'L_dot', x: n.position.x });
     // where each point sits when the logo is at rest, so the metalwork stays put on the letters as they fly in
     if (!n.geometry.attributes.aRest) {
       const rest = n.geometry.attributes.position.clone(); rest.applyMatrix4(new THREE.Matrix4().compose(n.position, n.quaternion, n.scale));
@@ -113,23 +117,41 @@ function mount(img, model) {
     }
     const b = new THREE.Box3().setFromBufferAttribute(n.geometry.attributes.aRest); lo.min(b.min); hi.max(b.max);
   });
-  metalwork(mat, lo, hi.clone().sub(lo));
+  metalwork(parts.map(p => p.m.material), lo, hi.clone().sub(lo));
+  // the bars light left to right, one colour each
+  parts.filter(p => !p.dot).sort((a, b) => a.x - b.x).forEach((p, i) => { p.at = 150 + i * STEP; p.neon = new THREE.Color(NEON[i % NEON.length]).multiplyScalar(1.2); });
+  parts.filter(p => p.dot).forEach(p => { p.at = SNAP; p.neon = new THREE.Color(0); });
   scene.add(rig);
   const cam = new THREE.PerspectiveCamera(30, 1100 / 547, .1, 20); cam.position.set(0, .02, 2.45);
 
   img.replaceWith(cv);
   const size = () => { const w = cv.clientWidth, h = cv.clientHeight; if (w && h) renderer.setSize(w, h, false); };
   new ResizeObserver(size).observe(cv); size();
-  let on = true, t0 = performance.now(), rx = 0, ry = 0;
+  const word = cv.parentNode && cv.parentNode.querySelector('.chrome-neon'); // the PORTFOLIO sign
+  let on = true, t0 = performance.now(), off = 0, rx = 0, ry = 0;
   new IntersectionObserver(es => { on = es[es.length - 1].isIntersecting; }).observe(cv);
-  cv.replay = () => { t0 = performance.now(); };
+  cv.replay = () => { t0 = performance.now(); off = 0; };
+  cv.powerOff = () => { off = performance.now(); };
 
   const loop = now => {
-    if (!cv.isConnected) { renderer.dispose(); pm.dispose(); mat.dispose(); return; } // the enter screen's logo is gone after ENTER
+    if (!cv.isConnected) { renderer.dispose(); pm.dispose(); parts.forEach(p => p.m.material.dispose()); return; } // the enter screen's logo is gone after ENTER
     requestAnimationFrame(loop);
     if (!on) return;
-    const e = 1 - Math.pow(1 - clamp((now - t0) / FLY, 0, 1), 3), left = 1 - e;
-    parts.forEach(p => p.m.position.set(p.home.x + p.from[0] * left, p.home.y + p.from[1] * left, p.home.z));
+    const t = now - t0, c = clamp((t - SNAP) / COOL, 0, 1), neon = 1 - c * c * (3 - 2 * c); // 1 while lit as neon, easing to 0 as it cools
+    parts.forEach(p => {
+      const s = t - p.at, f = s < 0 ? 0 : FLICK[Math.floor(s / 30)] ?? 1;
+      p.m.visible = f > 0;
+      p.m.material.color.setScalar(1 - .88 * neon); // dark metal, so the neon colour is what shows
+      p.m.material.emissive.copy(p.neon).multiplyScalar(neon * f);
+    });
+    const w = t - SNAP - COOL;
+    if (word) word.style.visibility = w < 0 || !(FLICK[Math.floor(w / 30)] ?? 1) ? 'hidden' : '';
+    const fx = [];
+    if (t > 150 && neon > .01) fx.push(`drop-shadow(0 0 ${(.03 * neon).toFixed(3)}em ${GLOW}) drop-shadow(0 0 ${(.12 * neon).toFixed(3)}em ${GLOW})`);
+    const b = off ? OFF[Math.min(OFF.length - 1, Math.floor((now - off) / 70))] : 1;
+    if (off) fx.push(`brightness(${b}) saturate(.6)`);
+    cv.style.filter = fx.join(' ');
+    cv.parentNode.style.opacity = off ? b : ''; // PORTFOLIO switches off with it
     // turn toward the mouse; with no mouse for a while (or on a phone), sway gently by itself
     let tx, ty;
     if (now - mouse.at < 4000) {
@@ -137,7 +159,7 @@ function mount(img, model) {
       tx = clamp((mouse.x - (r.left + r.width / 2)) / (innerWidth / 2), -1, 1); ty = clamp((mouse.y - (r.top + r.height / 2)) / (innerHeight / 2), -1, 1);
     } else { tx = Math.sin(now / 2100) * .6; ty = Math.sin(now / 2900) * .5; }
     rx += (ty * .14 - rx) * .07; ry += (tx * .45 - ry) * .07; // up/down moves the horizon line, sideways slides the glints
-    rig.rotation.set(.42 * left + rx, -.24 * left + ry, 0);
+    rig.rotation.set(rx, ry, 0);
     renderer.render(scene, cam);
   };
   requestAnimationFrame(loop);

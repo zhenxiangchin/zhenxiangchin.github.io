@@ -1381,6 +1381,7 @@
     const go = () => {
       if (done) return; done = true;
       try { sessionStorage.setItem('chinny-gate', '1'); } catch (e) {}
+      const gl = g.querySelector('.chrome-logo'); if (gl && gl.powerOff) gl.powerOff(); // the enter screen's logo switches off like an old TV
       const press = reduced ? 0 : 200; // hold the button down for a moment so the press is felt
       g.querySelector('button').classList.add('down');
       if (inTV) {
