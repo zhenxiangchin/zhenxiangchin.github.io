@@ -651,5 +651,7 @@ html.editing .stk-deco{pointer-events:auto}
   html{overscroll-behavior-y:none}
   .tube{bottom:auto;height:100vh;height:100lvh}
 }
+/* 27 Nov 2026: everything outside the frame is black too, so if the frame slides with the browser bar the gap stays covered */
+.tube{box-shadow:0 0 0 100vh #000}
 
 .chrome-hero{cursor:pointer}
